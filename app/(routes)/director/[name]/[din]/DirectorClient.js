@@ -15,7 +15,7 @@ import {
   LuBriefcase,
   LuLogOut,
   LuExternalLink,
-  LuLoader,
+  LuLoader2,
 } from "react-icons/lu";
 import Image from "next/image";
 
@@ -448,7 +448,7 @@ const DirectorClient = () => {
   if (loading) {
     return (
       <div className="container mx-auto text-center mt-10 p-4 flex justify-center items-center min-h-screen">
-        <LuLoader className="animate-spin text-blue-500 text-4xl" />
+        <LuLoader2 className="animate-spin text-blue-500 text-4xl" />
       </div>
     );
   }
