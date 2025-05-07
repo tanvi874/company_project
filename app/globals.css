@@ -1,0 +1,140 @@
+@import "tailwindcss";
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light Theme */
+    --background: #ffffff;
+    --foreground: #0f172a; /* Slightly darker text */
+    --card: #f8f9fa;
+    --card-foreground: #64748b;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --primary: #007bff;
+    --section-para: #64748f;
+    --text-ocean-mist: #6ed6ed;
+    /* --border: #e5e7eb; */
+    /* --input: #e5e7eb; */
+    --border: hsl(215 20% 93%); /* Lighter & softer gray */
+    --input: hsl(215 20% 93%); 
+    --destructive: #dc2626; /* Tailwind's red-600 */
+    --destructive-foreground: #ffffff;
+  }
+
+  /* Dark Theme */
+  .dark {
+    --background: #1e293b; /* Darker background */
+    --foreground: #cbd5e1; /* Lighter text */
+    --card: #334155; /* Darker card */
+    --card-foreground: #cbd5e1;
+    --muted: #334155;
+    --muted-foreground: #94a3b8;
+    --primary: #90cdf4; /* Lighter primary */
+    --section-para: #94a3b8;
+    /* --border: #475569; */
+    /* --input: #475569; */
+    --border: hsl(215 20% 30%); /* Lighter, less saturated blue-gray */
+    --input: hsl(215 20% 30%); /* Match input border */
+
+  }
+
+  body {
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    background-color: var(--background); /* Use CSS variable */
+    color: var(--foreground); /* Use CSS variable */
+  }
+}
+
+@layer components {
+  .wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+
+  @media (min-width: 640px) {
+    .wrapper {
+      padding: 0 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .wrapper {
+      padding: 0 2rem;
+    }
+  }
+
+  .bg-muted {
+    background-color: var(--muted); /* Use CSS variable */
+  }
+
+  .bg-card {
+    background-color: var(--card); /* Use CSS variable */
+  }
+
+  .text-card-foreground {
+    color: var(--card-foreground); /* Use CSS variable */
+  }
+
+  .text-muted-foreground {
+    color: var(--muted-foreground); /* Use CSS variable */
+  }
+
+  .text-primary {
+    color: var(--primary); /* Use CSS variable */
+  }
+
+  .section-para {
+    color: var(--section-para); /* Use CSS variable */
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: bolder;
+  }
+
+  .border {
+    /* border-width: 1px; */
+    border-color: var(--border);
+  }
+
+  .overflow-hidden {
+    overflow: hidden;
+  }
+
+  .text-ocean-mist {
+    color: var(--text-ocean-mist); /* Use CSS variable */
+  }
+
+  .search-director-btn {
+    background-color: #0074CC;
+  }
+
+  .search-director-btn:hover {
+    background-color: #112C97;
+  }
+
+  .getdocuments:hover {
+    color: #8863FD;
+    background-color: lightgray;
+  }
+
+  .btn-primary{
+    color: white;
+    background-color: #0074CC;
+  }
+
+  .unlockbutton:hover {
+    color: #8863FD;
+    background-color: lightgray;
+  }
+
+  .bg-destructive {
+    background-color: var(--destructive);
+  }
+
+  .text-destructive-foreground {
+    color: var(--destructive-foreground);
+  }
+}
