@@ -447,9 +447,9 @@ const DirectorClient = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto text-center mt-10 p-4 flex justify-center items-center min-h-screen">
-        <LuLoader2 className="animate-spin text-blue-500 text-4xl" />
-      </div>
+      <main className="container mx-auto text-center mt-20 p-4 flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </main>
     );
   }
 
