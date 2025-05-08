@@ -1,10 +1,9 @@
-// This is a Server Component (no "use client" directive)
 import React from "react";
 import axios from "axios";
-import DirectorClient from "./DirectorClient"; // Import the client component
+import DirectorClient from "./DirectorClient"; 
 
 
-const DIRECTOR_API_URL = `${process.env.NEXT_PUBLIC_BASE_URL}/api/company/getdirector`; 
+const DIRECTOR_API_URL = `https://company-project-beryl.vercel.app/api/company/getdirector`; 
 
 // Utility function for slugifying text (can be shared or redefined)
 function slugify(text) {
