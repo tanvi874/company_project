@@ -210,7 +210,7 @@ const FAQSectionJSX = ({ data }) => (
   <section id="faq" className="wrapper w-full mb-16 md:mb-24 px-4">
     <h2 className="section-title text-center mb-8 md:mb-12">
       All You Need To Know{" "}
-      <span className="block text-primary md:inline">About BizLecta</span>
+      <span className="block text-primary md:inline">About SetIndiaBiz</span>
     </h2>
     <div className="flex w-full flex-col items-center justify-center gap-3 md:flex-row md:gap-6 lg:mx-auto">
       <div className="max-w-sm md:max-w-md flex-shrink-0">
