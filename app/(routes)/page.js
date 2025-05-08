@@ -100,13 +100,11 @@ const StatsSectionJSX = () => (
 );
 
 const DirectorProfileSectionJSX = () => (
-  // Use padding on wrapper for consistent spacing
   <section className="wrapper py-10 md:py-14">
     <h1 className="section-title mb-8 md:mb-12 text-center mt-2">
       Explore Indian Directors <span className="text-primary">Complete</span>{" "}
       Profile
     </h1>
-    {/* Centered the container */}
     <div className="flex w-full flex-col items-center justify-center gap-8 lg:max-w-6xl lg:mx-auto lg:flex-row lg:justify-between lg:gap-12 xl:gap-16">
       {/* Text Content */}
       <div className="lg:w-1/2 lg:pr-8">
@@ -262,7 +260,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchMode, setSearchMode] = useState("company");
   const [error, setError] = useState("");
-  const [isNavigating, setIsNavigating] = useState(false); // Add loading state for navigation
+  const [isNavigating, setIsNavigating] = useState(false); 
 
   const [wordIndex, setWordIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
@@ -272,17 +270,17 @@ export default function Home() {
   const [suggestions, setSuggestions] = useState([]); // For company suggestions
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
-  const [suggestionError, setSuggestionError] = useState(""); // Specific error for suggestions
+  const [suggestionError, setSuggestionError] = useState(""); 
 
   // --- Refs ---
-  const searchContainerRef = useRef(null); // Ref for the search container
-  const suggestionTimeoutRef = useRef(null); // Ref for suggestion debounce timeout
+  const searchContainerRef = useRef(null); 
+  const suggestionTimeoutRef = useRef(null); 
 
   const router = useRouter();
 
   //company
   function slugify(text) {
-    if (!text) return "no-name"; // Fallback if name is missing
+    if (!text) return "no-name"; 
     return text
       .toString()
       .toLowerCase()
@@ -349,7 +347,6 @@ export default function Home() {
         response.data.success &&
         response.data.companyDetails
       ) {
-        // Basic validation
         if (
           response.data.companyDetails.CompanyName &&
           response.data.companyDetails.CIN
@@ -377,7 +374,6 @@ export default function Home() {
           "Error fetching from Personal Company API:",
           err.response?.data || err.message
         );
-        // Don't set global error here, let handleSearch decide
       }
       return null; // Indicate error or not found
     }
