@@ -78,10 +78,6 @@ export default function AdminCompanySearch() {
     // --- Core Search Logic ---
     const performSearch = useCallback(async (term, type, cinOverride = null) => {
         // Ensure user object is available before proceeding
-        if (!user) {
-            setError("Please log in to perform searches.");
-            return;
-        }
 
         const currentSearchTerm = cinOverride || term;
         const currentSearchType = cinOverride ? 'cin' : type;
