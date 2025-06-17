@@ -46,10 +46,10 @@ export async function POST(request) {
         }
 
         // Construct Email Body (Plain text or HTML)
-        const emailSubject = `Change Report: ${companyName} (CIN: ${companyCin}) - By ${reporterName}`;
+        const emailSubject = `Data Correction Report: ${companyName} (CIN: ${companyCin}) - By ${reporterName}`;
         const emailHtmlBody = `
             <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-                <h2>Company Change Report Received</h2>
+                <h2>Data Correction Report Received</h2>
                 <p>A change has been reported for the company: <strong>${companyName}</strong> (CIN: ${companyCin}).</p>
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
                 <p><strong>Reported By:</strong></p>
