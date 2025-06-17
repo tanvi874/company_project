@@ -11,7 +11,7 @@ const ZEPTO_VERIFIED_SENDER_EMAIL = "orders@setindiabiz.com";
 const ZEPTO_VERIFIED_SENDER_NAME = "SetIndiaBiz Report System"; // Display name for the "From" address
 
 // PRIMARY RECIPIENT of the report email
-const ZEPTO_PRIMARY_RECIPIENT_EMAIL = "help@setindiabiz.com";
+const ZEPTO_PRIMARY_RECIPIENT_EMAIL = "tanvibhasin695@gmail.com";
 const ZEPTO_PRIMARY_RECIPIENT_NAME = "SetIndiaBiz Helpdesk";
 
 // Optional: If Tanvi still needs a copy. Otherwise, set to null or remove.
