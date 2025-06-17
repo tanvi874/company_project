@@ -1,4 +1,4 @@
-// d:\CompanyWebsite\app\api\report-change\route.js
+// route.js
 import { NextResponse } from 'next/server';
 import { SendMailClient } from "zeptomail";
 
@@ -21,7 +21,7 @@ const ZEPTO_CC_ADMIN_NAME = "Tanvi Bhasin";
 
 export async function POST(request) {
     // Basic validation for ZeptoMail config on the server
-    if (!ZEPTOMAIL_TOKEN || !ZEPTO_FROM_EMAIL_ADDRESS) {
+    if (!ZEPTOMAIL_TOKEN || !ZEPTO_VERIFIED_SENDER_EMAIL) { // Corrected variable name here
         console.error("SERVER ERROR: ZeptoMail Token or From Address not configured.");
         return NextResponse.json({ success: false, message: "Server configuration error." }, { status: 500 });
     }
@@ -31,14 +31,14 @@ export async function POST(request) {
 
         // Destructure and validate required fields from the request body
         const {
-            reporterName, // Renamed from from_name for clarity
-            reporterEmail, // Renamed from from_email
-            reportMessage, // Renamed from message
+            reporterName, 
+            reporterEmail, 
+            reportMessage, 
             companyName,
             companyCin,
             attachmentContent, // Expect base64 encoded file content from client
             attachmentName,    // Expect file name from client
-            attachmentMimeType
+            attachmentMimeType // Expect file mime type from client
         } = body;
 
         if (!reporterName || !reporterEmail || !reportMessage || !companyName || !companyCin) {
@@ -54,8 +54,8 @@ export async function POST(request) {
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
                 <p><strong>Reported By:</strong></p>
                 <ul style="list-style-type: none; padding-left: 0;">
-                    <li><strong>Company Name:</strong> ${companyName}</li>
-                    <li><strong>CIN:</strong> ${companyCin}</li>
+                    <li><strong>Name:</strong> ${reporterName}</li>
+                    <li><strong>Email:</strong> ${reporterEmail} <em>(Replies to this email will go to this address)</em></li>
                 </ul>
                 <p><strong>Report Details:</strong></p>
                 <div style="background-color: #f9f9f9; border: 1px solid #ddd; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
@@ -137,8 +137,8 @@ export async function POST(request) {
 
     } catch (error) {
         console.error("API Route Error (report-change):", error);
-        const errorMessage = error.response?.data?.message || error.message || "Failed to send report.";
-        const statusCode = error.response?.status || 500;
+        const errorMessage = error.message || "Failed to send report."; // Use error.message directly
+        const statusCode = 500; // Default to 500, adjust if more specific error info is available
         return NextResponse.json({ success: false, message: errorMessage }, { status: statusCode });
     }
 }
