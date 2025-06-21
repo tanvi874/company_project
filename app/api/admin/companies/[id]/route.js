@@ -2,13 +2,25 @@ import dbConnect from 'lib/dbConnect';
 import { NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 
-import Company from 'lib/models/companyModel'; // Use @ alias or correct relative path
+import Company from 'lib/models/companyModel';
 
 // --- Helper to check admin role (Implement Real Auth!) ---
 async function isAdminUser(request) {
     // console.warn("API Authorization is using placeholder - Implement real auth check!");
     // Replace with your actual authentication/authorization logic
     return true;
+}
+
+// --- CORS Headers ---
+const corsHeaders = {
+    'Access-Control-Allow-Origin': 'https://company-site-56dec1.webflow.io', // Your Webflow domain
+    'Access-Control-Allow-Methods': 'GET, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+// --- OPTIONS Handler for Preflight Requests ---
+export async function OPTIONS(request) {
+    return new NextResponse(null, { headers: corsHeaders });
 }
 
 // --- GET Handler: Fetch specific record by _id ---
@@ -32,7 +44,7 @@ export async function GET(request, { params }) { // <-- Use { params } directly
         const companyRecord = await Company.findById(recordId).lean();
 
         if (!companyRecord) {
-            return NextResponse.json({ message: 'Record not found' }, { status: 404 });
+            return NextResponse.json({ message: 'Record not found' }, { status: 404, headers: corsHeaders });
         }
 
         // Convert _id and DirectorDIN (if exists) to string before sending response
@@ -46,16 +58,17 @@ export async function GET(request, { params }) { // <-- Use { params } directly
         }
         // Add similar checks for other ObjectId or non-string fields if needed
 
-        return NextResponse.json(companyRecord); // Send the fetched record
+        return NextResponse.json({ success: true, company: companyRecord }, { headers: corsHeaders }); // Send the fetched record
 
     } catch (error) {
         console.error("API GET Error fetching company [id]:", error);
         // Handle potential CastError if findById fails with bad format despite validation
         if (error instanceof mongoose.Error.CastError) {
-             return NextResponse.json({ message: 'Invalid Company ID format during query' }, { status: 400 });
+             return NextResponse.json({ message: 'Invalid Company ID format during query' }, { status: 400, headers: corsHeaders });
         }
         // Generic server error
-        return NextResponse.json({ message: 'Internal Server Error fetching company data' }, { status: 500 });
+        return NextResponse.json({ message: 'Internal Server Error fetching company data' }, { status: 500, headers: corsHeaders });
+
     }
 }
 
@@ -72,7 +85,7 @@ export async function PUT(request, { params }) { // <-- Use { params } directly
 
     // --- Corrected ID Validation ---
     if (!recordId || !mongoose.Types.ObjectId.isValid(recordId)) { // Check if NOT valid
-        return NextResponse.json({ message: 'Invalid or missing Record ID' }, { status: 400 });
+        return NextResponse.json({ message: 'Invalid or missing Record ID' }, { status: 400, headers: corsHeaders });
     }
 
     try {
@@ -80,7 +93,7 @@ export async function PUT(request, { params }) { // <-- Use { params } directly
         updatedData = await request.json();
     } catch (error) {
         console.error("API PUT Error parsing JSON:", error);
-        return NextResponse.json({ message: 'Invalid request body' }, { status: 400 });
+        return NextResponse.json({ message: 'Invalid request body' }, { status: 400, headers: corsHeaders });
      }
 
     try {
@@ -106,7 +119,7 @@ export async function PUT(request, { params }) { // <-- Use { params } directly
         );
 
         if (!savedRecord) {
-            return NextResponse.json({ message: 'Record not found for update' }, { status: 404 });
+            return NextResponse.json({ message: 'Record not found for update' }, { status: 404, headers: corsHeaders });
         }
 
         // Convert _id and DirectorDIN (if exists) back to string for the response
@@ -117,7 +130,7 @@ export async function PUT(request, { params }) { // <-- Use { params } directly
             savedRecord.DirectorDIN = savedRecord.DirectorDIN.toString();
         }
 
-        return NextResponse.json(savedRecord); // Return the updated record
+        return NextResponse.json({ success: true, message: 'Record updated successfully', company: savedRecord }, { headers: corsHeaders });
 
     } catch (error) {
         console.error("API PUT Error updating company [id]:", error);
