@@ -2,7 +2,7 @@ import dbConnect from 'lib/dbConnect';
 import { NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 
-import Company from 'lib/models/companyModel'; 
+import Company from 'lib/models/companyModel';
 
 // --- CORS Headers ---
 const corsHeaders = {
@@ -25,41 +25,36 @@ export async function OPTIONS(request) {
 }
 
 // --- GET Handler: Fetch specific record by _id ---
-export async function GET(request, { params }) { // <-- Use { params } directly
+export async function GET(request, { params }) {
     const isAdmin = await isAdminUser(request);
     // if (!isAdmin) {
     //     return NextResponse.json({ message: 'Forbidden: Admin access required' }, { status: 403 });
     // }
 
-    // --- Access id directly from params ---
     const recordId = params.id;
 
-    // --- Corrected ID Validation ---
-    if (!recordId || !mongoose.Types.ObjectId.isValid(recordId)) { // Check if NOT valid
+    if (!recordId || !mongoose.Types.ObjectId.isValid(recordId)) {
         return NextResponse.json({ message: 'Invalid or missing Record ID' }, { status: 400, headers: corsHeaders });
     }
 
     try {
-        await dbConnect(); // Ensure DB connection
-        // Fetch by MongoDB _id
+        await dbConnect();
         const companyRecord = await Company.findById(recordId).lean();
 
         if (!companyRecord) {
-            return NextResponse.json({ success: false, message: 'Record not found' }, { status: 404, headers: corsHeaders });
+            return NextResponse.json({ message: 'Record not found' }, { status: 404, headers: corsHeaders });
         }
 
-        // Convert _id and DirectorDIN (if exists) to string before sending response
-        // Mongoose lean() might return BSON ObjectId, ensure it's stringified
+        // The frontend expects a plain object with string IDs.
+        // Mongoose's lean() returns a plain object, but ObjectIds need to be stringified.
         if (companyRecord._id) {
             companyRecord._id = companyRecord._id.toString();
         }
-        // Directors are nested, so iterate and convert their _id and DIN if necessary
         if (companyRecord.directors && Array.isArray(companyRecord.directors)) {
             companyRecord.directors = companyRecord.directors.map(director => {
                 if (director._id) {
                     director._id = director._id.toString();
                 }
-                // Assuming DirectorDIN is stored as a Number in DB, convert to string for consistency if needed
                 if (director.DirectorDIN != null) {
                     director.DirectorDIN = director.DirectorDIN.toString();
                 }
@@ -67,33 +62,29 @@ export async function GET(request, { params }) { // <-- Use { params } directly
             });
         }
 
-        return NextResponse.json({ success: true, company: companyRecord }, { headers: corsHeaders }); // Send the fetched record
+        // The frontend expects the company object directly, not nested under a 'company' key.
+        return NextResponse.json(companyRecord, { headers: corsHeaders });
 
     } catch (error) {
         console.error("API GET Error fetching company [id]:", error);
-        // Handle potential CastError if findById fails with bad format despite validation
         if (error instanceof mongoose.Error.CastError) {
              return NextResponse.json({ message: 'Invalid Company ID format during query' }, { status: 400, headers: corsHeaders  });
         }
-        // Generic server error
         return NextResponse.json({ message: 'Internal Server Error fetching company data' }, { status: 500, headers: corsHeaders  });
-        
     }
 }
 
 // --- PUT Handler: Update specific record by _id ---
-export async function PUT(request, { params }) { // <-- Use { params } directly
+export async function PUT(request, { params }) {
     const isAdmin = await isAdminUser(request);
     // if (!isAdmin) {
     //     return NextResponse.json({ message: 'Forbidden: Admin access required' }, { status: 403 });
     // }
 
-    // --- Access id directly from params ---
     const recordId = params.id;
     let payload;
 
-    // --- Corrected ID Validation ---
-    if (!recordId || !mongoose.Types.ObjectId.isValid(recordId)) { // Check if NOT valid
+    if (!recordId || !mongoose.Types.ObjectId.isValid(recordId)) {
         return NextResponse.json({ message: 'Invalid or missing Record ID' }, { status: 400, headers: corsHeaders });
     }
     
@@ -104,55 +95,28 @@ export async function PUT(request, { params }) { // <-- Use { params } directly
         return NextResponse.json({ message: 'Invalid request body' }, { status: 400, headers: corsHeaders });
      }
 
-    const { companyUpdates, directorUpdates } = payload;
-
-    if (!companyUpdates && !directorUpdates) {
-        return NextResponse.json({ message: 'Request body must contain companyUpdates or directorUpdates' }, { status: 400, headers: corsHeaders });
-    }
-
     try {
-        await dbConnect(); // Ensure DB connection
+        await dbConnect();
 
-        const updateOps = {};
-
-        // Prepare company updates
-        if (companyUpdates && Object.keys(companyUpdates).length > 0) {
-            // Mongoose will handle casting, but we ensure numbers are numbers
-            if (companyUpdates.authorisedCapital != null) companyUpdates.authorisedCapital = parseFloat(companyUpdates.authorisedCapital) || 0;
-            if (companyUpdates.paidUpCapital != null) companyUpdates.paidUpCapital = parseFloat(companyUpdates.paidUpCapital) || 0;
-            if (companyUpdates.postalCode != null) companyUpdates.postalCode = parseInt(companyUpdates.postalCode, 10) || 0;
-            if (companyUpdates.mainDivision != null) companyUpdates.mainDivision = parseInt(companyUpdates.mainDivision, 10) || 0;
-            
-            delete companyUpdates._id; // Never update the _id from the payload
-            updateOps.$set = { ...companyUpdates };
-        }
-
-        // Prepare director updates (assuming 'directors' is the path in the Company schema)
-        // This will replace the entire directors array in the document
-        if (directorUpdates && Array.isArray(directorUpdates)) {
-            if (!updateOps.$set) {
-                updateOps.$set = {};
-            }
-            // Mongoose will handle casting the array of objects. The frontend script already handles number conversion.
-            updateOps.$set.directors = directorUpdates; 
-        }
+        // Sanitize payload to prevent updating immutable or protected fields.
+        delete payload._id;
+        delete payload.cin; // CIN should not be changed via this endpoint.
+        delete payload.__v;
 
         // Update by MongoDB _id using findByIdAndUpdate
         const savedRecord = await Company.findByIdAndUpdate(
             recordId,
-            updateOps, // Use updateOps
+            { $set: payload }, // Use the flat payload from the form. Mongoose will ignore fields not in the schema.
             { new: true, runValidators: true, lean: true } // Options: return updated doc, run schema validators, return plain object
         );
 
         if (!savedRecord) {
-            return NextResponse.json({ success: false, message: 'Record not found for update' }, { status: 404, headers: corsHeaders });
+            return NextResponse.json({ message: 'Record not found for update' }, { status: 404, headers: corsHeaders });
         }
 
-        // Convert _id and DirectorDIN (if exists) back to string for the response
         if (savedRecord._id) {
             savedRecord._id = savedRecord._id.toString();
         }
-        // Re-convert directors' _id and DIN for the response if they are subdocuments
         if (savedRecord.directors && Array.isArray(savedRecord.directors)) {
             savedRecord.directors = savedRecord.directors.map(director => {
                 if (director._id) {
@@ -165,18 +129,17 @@ export async function PUT(request, { params }) { // <-- Use { params } directly
             });
         }
 
-        return NextResponse.json({ success: true, message: 'Record updated successfully', company: savedRecord }, { headers: corsHeaders });
+        // Return the updated record directly, matching the frontend's expectation.
+        return NextResponse.json(savedRecord, { headers: corsHeaders });
 
     } catch (error) {
         console.error("API PUT Error updating company [id]:", error);
-        // Handle specific Mongoose errors
         if (error instanceof mongoose.Error.CastError) {
              return NextResponse.json({ message: `Invalid data format: ${error.message}` }, { status: 400, headers: corsHeaders });
         }
         if (error instanceof mongoose.Error.ValidationError) {
              return NextResponse.json({ message: `Validation failed: ${error.message}` }, { status: 400, headers: corsHeaders });
         }
-        // Generic server error
         return NextResponse.json({ message: 'Internal Server Error saving company data' }, { status: 500, headers: corsHeaders });
     }
 }
