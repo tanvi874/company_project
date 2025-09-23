@@ -5,7 +5,7 @@ const About = () => {
   return (
     <main className="container-fluid mb-20">
         <section className="flex pt-16 wrapper min-h-44 flex-col justify-between rounded-lg bg-muted p-2 sm:flex-row md:mt-10 md:gap-16">
-            <div className="pt-10 sm:pt-5 lg:pt-10 ml-5">
+            <div className="pt-10 sm:pt-5 lg:pt-10 pl-8 ml-8">
                 <h1 className="text-2xl font-bold sm:whitespace-nowrap lg:text-3xl xl:text-4xl">
                 Get <span className="text-primary">Everything</span> Your Business Needs
                 </h1>
@@ -25,14 +25,14 @@ const About = () => {
             </div>
         </section>
 
-        <section className="wrapper mt-5">
+        <section className="mt-5 ml-5 mr-5">
             <div className="relative rounded-lg border-l-8 border-l-gray-700 items-start
             bg-background py-5 pl-16 pr-5 font-sans text-sm italic leading-relaxed text-gray-500 shadow before:absolute before:left-3 before:top-3 before:font-serif before:text-6xl before:text-gray-700 before:content-['“'] md:text-base lg:text-lg">
                 Ignoring compliance is like driving blind. Stay informed
             </div>
         </section>
 
-        <section className="wrapper mt-10">
+        <section className="mt-10 ml-6 mr-3">
             <div>
                 <h2 className="md:ext-2xl text-xl font-bold lg:text-3xl">
                 How We <span className="text-primary">Started</span>
@@ -66,12 +66,12 @@ const About = () => {
         className="my-8 h-[1px] w-full shrink-0 bg-gray-100 md:my-10">
         </div>
 
-        <section className="wrapper">
+        <section className="">
             <div className="flex flex-col items-center">
                 <h3 className="text-xl md:text-2xl lg:text-3xl  font-bold">
                 Our Values
                 </h3>
-                <div className="mt-6 flex flex-col gap-6 md:mt-10 md:flex-row md:gap-8">
+                <div className="mt-6 flex flex-col gap-6 md:mt-10 md:flex-row md:gap-8 ml-6 mr-6">
                 {/* Accuracy Card */}
                 <div className="flex flex-col items-center rounded-xl border bg-card p-6 text-card-foreground shadow">
                     <CheckCircle2 className="text-3xl text-green-500" aria-hidden="true" />
