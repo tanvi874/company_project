@@ -7,12 +7,14 @@ import { useAuth } from 'context/AuthContext';
 // import { auth } from 'lib/firebase'; // Import if sign-out button is added
 import axios from 'axios';
 import { IndianRupee, Clock, User, Hash, CheckCircle, AlertCircle, Loader2, LogOut } from 'lucide-react'; // Added LogOut for potential sign-out button
+import { API_PREFIX } from 'lib/api-modifier';
 
 // --- Fetch Payment History Function (Uses actual API call) ---
 const fetchPaymentHistory = async (userId) => {
     console.log(`Fetching payment history for user: ${userId}`);
     // TODO: Consider using environment variables for API base URL
-    const apiUrl = `/api/payment/history?userId=${userId}`;
+
+    const apiUrl = `${API_PREFIX}/payment/history?userId=${userId}`;
 
     try {
         const response = await axios.get(apiUrl);

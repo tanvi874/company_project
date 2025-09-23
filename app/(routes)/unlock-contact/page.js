@@ -34,6 +34,7 @@ import Image from "next/image";
 import axios from "axios";
 import { useAuth } from "context/AuthContext"; // Import useAuth to get user ID
 import { FaLock } from "react-icons/fa";
+import { API_PREFIX } from "lib/api-modifier";
 // Import ZeptoMail client - REMOVED FROM CLIENT-SIDE
 // import { SendMailClient } from "zeptomail";
 
@@ -117,7 +118,8 @@ const UnlockContactContent = () => {
       setDirectorData(null); // Reset director data on new search
       setIsPaid(false); // Reset paid status on new search
 
-      const directorApiUrl = `/api/company/getdirector?${queryParam}=${encodeURIComponent(
+
+      const directorApiUrl = `${API_PREFIX}/company/getdirector?${queryParam}=${encodeURIComponent(
         value
       )}`;
       console.log("Fetching Director:", directorApiUrl);
@@ -304,7 +306,7 @@ const UnlockContactContent = () => {
       }`.trim();
       try {
         console.log("Creating Razorpay order...");
-        const orderResponse = await axios.post(`/api/payment/create-order`, {
+        const orderResponse = await axios.post(`${API_PREFIX}/payment/create-order`, {
           amount: PAYMENT_AMOUNT_INR * 100, // Amount in paise
           currency: "INR",
           receipt: `receipt_din_${dinToPay}_${Date.now()}`,
@@ -364,7 +366,7 @@ const UnlockContactContent = () => {
           try {
             console.log("Verifying payment with payload:", verificationPayload);
             const verifyResponse = await axios.post(
-              `/api/payment/verify-payment`,
+              `${API_PREFIX}/payment/verify-payment`,
               verificationPayload
             );
 
@@ -397,7 +399,7 @@ const UnlockContactContent = () => {
 
                 // Make POST request to the API route
                 const emailApiResponse = await axios.post(
-                  "/api/send-unlock-email",
+                  `${API_PREFIX}/send-unlock-email`,
                   emailPayload
                 );
 
@@ -526,7 +528,7 @@ const UnlockContactContent = () => {
         setShowNameSearchInput(false);
         fetchDirectorData("din", dinToSearch);
         // Update URL without full page reload
-        router.push(`/unlock-contact?din=${dinToSearch}`, { scroll: false });
+        router.push(`${API_PREFIX}/unlock-contact?din=${dinToSearch}`, { scroll: false });
       } else {
         setError("Please enter a valid DIN (digits only) to search.");
       }
@@ -543,7 +545,7 @@ const UnlockContactContent = () => {
         setSearchDin(""); // Clear DIN when searching by name
         fetchDirectorData("name", nameToSearch);
         // Clear DIN from URL
-        router.push(`/unlock-contact`, { scroll: false });
+        router.push(`${API_PREFIX}/unlock-contact`, { scroll: false });
       } else {
         setError("Please enter a director name to search.");
       }

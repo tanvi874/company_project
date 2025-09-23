@@ -18,6 +18,7 @@ import {
   LuLoader,
 } from "react-icons/lu";
 import Image from "next/image";
+import { API_PREFIX } from "lib/api-modifier";
 
 // Helper component for table rows
 const DetailRow = ({ label, value, isMasked = false, ctaElement = null }) => {
@@ -132,9 +133,10 @@ const DirectorClient = () => {
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("associated-companies");
 
+
   // API URLs - Ensure these are correct and NEXT_PUBLIC_DIRECTOR_API_URL is set in your .env.local
-  const DIRECTOR_API_URL = process.env.NEXT_PUBLIC_DIRECTOR_API_URL || "/api/company/getdirector";
-  const COMPANY_API_URL = process.env.NEXT_PUBLIC_COMPANY_API_URL || "/api/company/getcompany";
+  const DIRECTOR_API_URL = `${API_PREFIX}/company/getdirector`;
+  const COMPANY_API_URL = `${API_PREFIX}/company/getcompany`;
 
 
   const { din, name: nameSlug } = params;

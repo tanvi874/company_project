@@ -19,12 +19,13 @@ import {
   LuLoader,
 } from "react-icons/lu";
 import axios from "axios";
+import { API_PREFIX } from "lib/api-modifier";
 
 // Constants defined directly in the client component
 const COMPANY_API_URL =
-  process.env.NEXT_PUBLIC_COMPANY_API_URL || "/api/company/getcompany";
+  process.env.NEXT_PUBLIC_COMPANY_API_URL || `${API_PREFIX}/company/getcompany`;
 const PUBLIC_MCA_API_URL =
-  process.env.NEXT_PUBLIC_MCA_API_URL || "/api/public/mca";
+  process.env.NEXT_PUBLIC_MCA_API_URL || `${API_PREFIX}/public/mca`;
 
 // Utility functions defined directly in the client component
 const getInitials = (name) => {
@@ -628,7 +629,7 @@ const CompanyClient = () => {
                       ))
                     ) : (
                       <p className="py-4 text-sm text-muted-foreground">
-                          No director information available.
+                        No director information available.
                       </p>
                     )}
                   </div>
@@ -640,7 +641,7 @@ const CompanyClient = () => {
                   >
                     Report any Change?
                   </button>
-                   {popup && (
+                  {popup && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
                       <div className="relative w-full max-w-lg rounded-xl bg-white p-6 shadow-lg">
                         <button
@@ -733,49 +734,186 @@ const CompanyClient = () => {
               </div>
             </div>
 
-             <div className="grid gap-4 md:grid-cols-3 mt-10">
+            <div className="grid gap-4 md:grid-cols-3 mt-10">
               <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-700 to-blue-500 shadow-md">
                 <div className="relative z-10 p-4 text-white">
-                  <div className="flex w-fit items-center gap-2 rounded bg-white/20 px-2 py-1"><LucidePieChart className="size-6" /><h3 className="text-sm font-semibold drop-shadow md:text-base">Complete Company Report + Documents</h3></div>
-                  <p className="mt-4 text-xs drop-shadow">All-in-one company intelligence package</p>
+                  <div className="flex w-fit items-center gap-2 rounded bg-white/20 px-2 py-1">
+                    <LucidePieChart className="size-6" />
+                    <h3 className="text-sm font-semibold drop-shadow md:text-base">
+                      Complete Company Report + Documents
+                    </h3>
+                  </div>
+                  <p className="mt-4 text-xs drop-shadow">
+                    All-in-one company intelligence package
+                  </p>
                   <ul className="mt-2 space-y-1.5 text-xs">
-                    <li className="flex items-center gap-2 drop-shadow"><LuCheck className="size-4 text-purple-300" /><span>In-depth financial analysis & performance trends</span></li>
-                    <li className="flex items-center gap-2 drop-shadow"><LuCheck className="size-4 text-purple-300" /><span>All documents filed on both V2 & V3 MCA portal</span></li>
-                    <li className="flex items-center gap-2 drop-shadow"><LuCheck className="size-4 text-purple-300" /><span>Year-wise insights with interactive charts</span></li>
+                    <li className="flex items-center gap-2 drop-shadow">
+                      <LuCheck className="size-4 text-purple-300" />
+                      <span>
+                        In-depth financial analysis & performance trends
+                      </span>
+                    </li>
+                    <li className="flex items-center gap-2 drop-shadow">
+                      <LuCheck className="size-4 text-purple-300" />
+                      <span>
+                        All documents filed on both V2 & V3 MCA portal
+                      </span>
+                    </li>
+                    <li className="flex items-center gap-2 drop-shadow">
+                      <LuCheck className="size-4 text-purple-300" />
+                      <span>Year-wise insights with interactive charts</span>
+                    </li>
                   </ul>
-                  <div className="mt-4"><button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white unlockbutton h-10 px-4 py-2 w-full text-purple-700 lg:w-fit" type="button"><span className="mr-1.5 font-semibold">Unlock</span><LuAtSign className="mr-1.5 size-4" /><span className="text-lg font-bold">₹799</span></button></div>
-                  <p className="mt-2 text-center text-[10px] italic drop-shadow-sm lg:max-w-[60%] lg:text-left">Or Enjoy up to 50% discount with our credit packages <br /><button className="text-muted underline hover:text-white" type="button">view credit packages</button></p>
+                  <div className="mt-4">
+                    <button
+                      className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white unlockbutton h-10 px-4 py-2 w-full text-purple-700 lg:w-fit"
+                      type="button"
+                    >
+                      <span className="mr-1.5 font-semibold">Unlock</span>
+                      <LuAtSign className="mr-1.5 size-4" />
+                      <span className="text-lg font-bold">₹799</span>
+                    </button>
+                  </div>
+                  <p className="mt-2 text-center text-[10px] italic drop-shadow-sm lg:max-w-[60%] lg:text-left">
+                    Or Enjoy up to 50% discount with our credit packages <br />
+                    <button
+                      className="text-muted underline hover:text-white"
+                      type="button"
+                    >
+                      view credit packages
+                    </button>
+                  </p>
                 </div>
-                <div className="absolute left-[65%] top-24 z-[5] hidden h-[190px] w-[260px] overflow-hidden rounded-tl-lg border border-gray-300 shadow-2xl lg:block"><Image alt="Financials Table" loading="lazy" width={360} height={272} className="h-full w-full object-cover object-left-top" src="https://www.setindiabiz.com/assets/company-name-search/directors.webp" /></div>
-                <div className="absolute left-[60%] top-16 hidden h-60 w-72 overflow-hidden rounded-tl-lg border border-gray-300 shadow-md lg:block"><Image alt="Public Docs Table" loading="lazy" width={420} height={340} className="h-full w-full object-cover object-left-top" src="https://www.setindiabiz.com/assets/company-name-search/directors.webp" /></div>
+                <div className="absolute left-[65%] top-24 z-[5] hidden h-[190px] w-[260px] overflow-hidden rounded-tl-lg border border-gray-300 shadow-2xl lg:block">
+                  <Image
+                    alt="Financials Table"
+                    loading="lazy"
+                    width={360}
+                    height={272}
+                    className="h-full w-full object-cover object-left-top"
+                    src="https://www.setindiabiz.com/assets/company-name-search/directors.webp"
+                  />
+                </div>
+                <div className="absolute left-[60%] top-16 hidden h-60 w-72 overflow-hidden rounded-tl-lg border border-gray-300 shadow-md lg:block">
+                  <Image
+                    alt="Public Docs Table"
+                    loading="lazy"
+                    width={420}
+                    height={340}
+                    className="h-full w-full object-cover object-left-top"
+                    src="https://www.setindiabiz.com/assets/company-name-search/directors.webp"
+                  />
+                </div>
               </div>
               <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-sky-400 shadow-md">
                 <div className="relative z-10 p-4 text-white">
-                  <div className="flex w-fit items-center gap-2 rounded bg-white/20 px-2 py-1"><LuFileText className="size-6" /><h3 className="text-sm font-semibold drop-shadow md:text-base">MCA Documents Access</h3></div>
-                  <p className="mt-4 text-xs drop-shadow">Quick access to all public filings</p>
+                  <div className="flex w-fit items-center gap-2 rounded bg-white/20 px-2 py-1">
+                    <LuFileText className="size-6" />
+                    <h3 className="text-sm font-semibold drop-shadow md:text-base">
+                      MCA Documents Access
+                    </h3>
+                  </div>
+                  <p className="mt-4 text-xs drop-shadow">
+                    Quick access to all public filings
+                  </p>
                   <ul className="mt-2 space-y-1.5 text-xs">
-                    <li className="flex items-center gap-2 drop-shadow"><LuCheck className="size-4 text-purple-300" /><span>All documents filed on both V2 & V3 MCA portal</span></li>
-                    <li className="flex items-center gap-2 drop-shadow"><LuCheck className="size-4 text-purple-300" /><span>Incorporation certificates & annual returns</span></li>
-                    <li className="flex items-center gap-2 drop-shadow"><LuCheck className="size-4 text-purple-300" /><span>Smart search & bulk download features</span></li>
+                    <li className="flex items-center gap-2 drop-shadow">
+                      <LuCheck className="size-4 text-purple-300" />
+                      <span>
+                        All documents filed on both V2 & V3 MCA portal
+                      </span>
+                    </li>
+                    <li className="flex items-center gap-2 drop-shadow">
+                      <LuCheck className="size-4 text-purple-300" />
+                      <span>Incorporation certificates & annual returns</span>
+                    </li>
+                    <li className="flex items-center gap-2 drop-shadow">
+                      <LuCheck className="size-4 text-purple-300" />
+                      <span>Smart search & bulk download features</span>
+                    </li>
                   </ul>
-                  <div className="mt-4"><button className="inline-flex items-center justify-center whitespace-nowrap bg-white rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 getdocuments h-10 px-4 py-2 relative w-full text-purple-700 lg:w-fit" type="button"><span className="mr-1.5 font-semibold">Get Documents</span><LuAtSign className="mr-1.5 size-4" /><span className="text-lg font-bold">₹499</span><LuStar className="absolute -right-2 -top-2 size-5 rotate-12 text-yellow-400 fill-amber-200" /></button></div>
-                  <p className="mt-2 text-center text-[10px] italic drop-shadow-sm lg:text-left">* Upgrade to full report for in-depth financial analysis</p>
+                  <div className="mt-4">
+                    <button
+                      className="inline-flex items-center justify-center whitespace-nowrap bg-white rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 getdocuments h-10 px-4 py-2 relative w-full text-purple-700 lg:w-fit"
+                      type="button"
+                    >
+                      <span className="mr-1.5 font-semibold">
+                        Get Documents
+                      </span>
+                      <LuAtSign className="mr-1.5 size-4" />
+                      <span className="text-lg font-bold">₹499</span>
+                      <LuStar className="absolute -right-2 -top-2 size-5 rotate-12 text-yellow-400 fill-amber-200" />
+                    </button>
+                  </div>
+                  <p className="mt-2 text-center text-[10px] italic drop-shadow-sm lg:text-left">
+                    * Upgrade to full report for in-depth financial analysis
+                  </p>
                 </div>
-                <div className="absolute left-[60%] top-16 hidden h-60 w-72 overflow-hidden rounded-tl-lg border border-gray-300 shadow-md lg:block"><Image alt="Public Docs Table" loading="lazy" width={421} height={340} className="h-full w-full object-cover object-left-top" src="https://www.setindiabiz.com/assets/company-name-search/decision-contact.webp" /></div>
+                <div className="absolute left-[60%] top-16 hidden h-60 w-72 overflow-hidden rounded-tl-lg border border-gray-300 shadow-md lg:block">
+                  <Image
+                    alt="Public Docs Table"
+                    loading="lazy"
+                    width={421}
+                    height={340}
+                    className="h-full w-full object-cover object-left-top"
+                    src="https://www.setindiabiz.com/assets/company-name-search/decision-contact.webp"
+                  />
+                </div>
               </div>
               <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-sky-400 shadow-md">
                 <div className="relative z-10 p-4 text-white">
-                  <div className="flex w-fit items-center gap-2 rounded bg-white/20 px-2 py-1"><LuFileText className="size-6" /><h3 className="text-sm font-semibold drop-shadow md:text-base">MCA Documents Access</h3></div>
-                  <p className="mt-4 text-xs drop-shadow">Quick access to all public filings</p>
+                  <div className="flex w-fit items-center gap-2 rounded bg-white/20 px-2 py-1">
+                    <LuFileText className="size-6" />
+                    <h3 className="text-sm font-semibold drop-shadow md:text-base">
+                      MCA Documents Access
+                    </h3>
+                  </div>
+                  <p className="mt-4 text-xs drop-shadow">
+                    Quick access to all public filings
+                  </p>
                   <ul className="mt-2 space-y-1.5 text-xs">
-                    <li className="flex items-center gap-2 drop-shadow"><LuCheck className="size-4 text-purple-300" /><span>All documents filed on both V2 & V3 MCA portal</span></li>
-                    <li className="flex items-center gap-2 drop-shadow"><LuCheck className="size-4 text-purple-300" /><span>Incorporation certificates & annual returns</span></li>
-                    <li className="flex items-center gap-2 drop-shadow"><LuCheck className="size-4 text-purple-300" /><span>Smart search & bulk download features</span></li>
+                    <li className="flex items-center gap-2 drop-shadow">
+                      <LuCheck className="size-4 text-purple-300" />
+                      <span>
+                        All documents filed on both V2 & V3 MCA portal
+                      </span>
+                    </li>
+                    <li className="flex items-center gap-2 drop-shadow">
+                      <LuCheck className="size-4 text-purple-300" />
+                      <span>Incorporation certificates & annual returns</span>
+                    </li>
+                    <li className="flex items-center gap-2 drop-shadow">
+                      <LuCheck className="size-4 text-purple-300" />
+                      <span>Smart search & bulk download features</span>
+                    </li>
                   </ul>
-                  <div className="mt-4"><button className="inline-flex items-center justify-center whitespace-nowrap bg-white rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 getdocuments h-10 px-4 py-2 relative w-full text-purple-700 lg:w-fit" type="button"><span className="mr-1.5 font-semibold">Get Documents</span><LuAtSign className="mr-1.5 size-4" /><span className="text-lg font-bold">₹499</span><LuStar className="absolute -right-2 -top-2 size-5 rotate-12 text-yellow-400 fill-amber-200" /></button></div>
-                  <p className="mt-2 text-center text-[10px] italic drop-shadow-sm lg:text-left">* Upgrade to full report for in-depth financial analysis</p>
+                  <div className="mt-4">
+                    <button
+                      className="inline-flex items-center justify-center whitespace-nowrap bg-white rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 getdocuments h-10 px-4 py-2 relative w-full text-purple-700 lg:w-fit"
+                      type="button"
+                    >
+                      <span className="mr-1.5 font-semibold">
+                        Get Documents
+                      </span>
+                      <LuAtSign className="mr-1.5 size-4" />
+                      <span className="text-lg font-bold">₹499</span>
+                      <LuStar className="absolute -right-2 -top-2 size-5 rotate-12 text-yellow-400 fill-amber-200" />
+                    </button>
+                  </div>
+                  <p className="mt-2 text-center text-[10px] italic drop-shadow-sm lg:text-left">
+                    * Upgrade to full report for in-depth financial analysis
+                  </p>
                 </div>
-                <div className="absolute left-[60%] top-16 hidden h-60 w-72 overflow-hidden rounded-tl-lg border border-gray-300 shadow-md lg:block"><Image alt="Public Docs Table" loading="lazy" width={421} height={340} className="h-full w-full object-cover object-left-top" src="https://www.setindiabiz.com/assets/company-name-search/decision-contact.webp" /></div>
+                <div className="absolute left-[60%] top-16 hidden h-60 w-72 overflow-hidden rounded-tl-lg border border-gray-300 shadow-md lg:block">
+                  <Image
+                    alt="Public Docs Table"
+                    loading="lazy"
+                    width={421}
+                    height={340}
+                    className="h-full w-full object-cover object-left-top"
+                    src="https://www.setindiabiz.com/assets/company-name-search/decision-contact.webp"
+                  />
+                </div>
               </div>
             </div>
 
@@ -783,15 +921,38 @@ const CompanyClient = () => {
               <div className="wrapper relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-600 to-blue-500  text-white shadow-md md:rounded-xl md:p-10">
                 <div className="flex flex-col items-center sm:flex-row">
                   <div className="z-10 sm:w-7/12">
-                    <h2 className="mb-6 w-[95%] text-xl font-semibold md:text-2xl lg:text-3xl">Ready to Reach New Clients and Boost Your Business?</h2>
-                    <p className="mb-8 text-xs font-light md:text-sm lg:text-base">Whether you are in sales, marketing, IT services, or consulting, access exclusive data on newly registered companies to stay ahead of your competition. Fresh leads delivered daily to help you grow.</p>
-                    <Link className="inline-flex items-center bg-white justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary hover:bg-secondary/80 py-2 h-12 w-full gap-2 px-5 text-sm font-bold text-blue-700 sm:w-fit lg:text-base" href="/"><LuFileSpreadsheet className="text-lg md:text-2xl" />Get Your Daily Reports Now</Link>
+                    <h2 className="mb-6 w-[95%] text-xl font-semibold md:text-2xl lg:text-3xl">
+                      Ready to Reach New Clients and Boost Your Business?
+                    </h2>
+                    <p className="mb-8 text-xs font-light md:text-sm lg:text-base">
+                      Whether you are in sales, marketing, IT services, or
+                      consulting, access exclusive data on newly registered
+                      companies to stay ahead of your competition. Fresh leads
+                      delivered daily to help you grow.
+                    </p>
+                    <Link
+                      className="inline-flex items-center bg-white justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary hover:bg-secondary/80 py-2 h-12 w-full gap-2 px-5 text-sm font-bold text-blue-700 sm:w-fit lg:text-base"
+                      href="/"
+                    >
+                      <LuFileSpreadsheet className="text-lg md:text-2xl" />
+                      Get Your Daily Reports Now
+                    </Link>
                   </div>
                   <div className="z-10 mt-8 sm:w-5/12 md:mt-0">
                     <div className="relative h-auto">
                       <div className="absolute right-0 top-0 h-16 w-16 rounded-full bg-blue-400 opacity-50" />
                       <div className="absolute bottom-0 left-0 h-24 w-24 rounded-full bg-blue-500 opacity-50" />
-                      <Image alt="Business analytics illustration" loading="lazy" width={500} height={500} decoding="async" data-nimg={1} className="h-auto max-h-64 w-auto transform md:absolute md:left-1/2 md:top-1/2 md:max-h-80 md:-translate-x-1/2 md:-translate-y-1/2" style={{ color: "transparent" }} src="https://www.setindiabiz.com/assets/company-name-search/report.webp" />
+                      <Image
+                        alt="Business analytics illustration"
+                        loading="lazy"
+                        width={500}
+                        height={500}
+                        decoding="async"
+                        data-nimg={1}
+                        className="h-auto max-h-64 w-auto transform md:absolute md:left-1/2 md:top-1/2 md:max-h-80 md:-translate-x-1/2 md:-translate-y-1/2"
+                        style={{ color: "transparent" }}
+                        src="https://www.setindiabiz.com/assets/company-name-search/report.webp"
+                      />
                     </div>
                   </div>
                 </div>
@@ -815,9 +976,7 @@ const CompanyClient = () => {
                         <span className="text-left text-sm font-medium text-gray-800 md:text-base">
                           {faq.question}
                         </span>
-                        <LuChevronDown
-                          className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180"
-                        />
+                        <LuChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180" />
                       </summary>
                       <div className="overflow-hidden transition-[max-height] duration-300 ease-in-out group-open:max-h-screen max-h-0">
                         <p className="pb-4 pt-1 text-sm text-muted-foreground">
@@ -841,66 +1000,143 @@ const CompanyClient = () => {
             <h4 className="text-base font-semibold md:text-lg ">Overview</h4>
             <div className="mt-6 grid grid-cols-2 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
               {[
-                { label: "Board Members", value: directorRecords.length, color: "#7879FC" },
+                {
+                  label: "Board Members",
+                  value: directorRecords.length,
+                  color: "#7879FC",
+                },
                 { label: "Past Directors", value: 0, color: "#FC9858" },
-                { label: "Current Leadership", value: directorRecords.length, color: "#2CDE9A" },
+                {
+                  label: "Current Leadership",
+                  value: directorRecords.length,
+                  color: "#2CDE9A",
+                },
               ].map(({ label, value, color }) => (
-                <div key={label} className="border-amber-100 bg-card text-card-foreground shadow md:p-8 space-y-1 rounded-md sm:p-6">
+                <div
+                  key={label}
+                  className="border-amber-100 bg-card text-card-foreground shadow md:p-8 space-y-1 rounded-md sm:p-6"
+                >
                   <p className="text-sm font-normal sm:text-base">{label}</p>
-                  <p className="text-xl font-extrabold md:text-4xl lg:text-3xl" style={{ color }}>{value}</p>
+                  <p
+                    className="text-xl font-extrabold md:text-4xl lg:text-3xl"
+                    style={{ color }}
+                  >
+                    {value}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
           <section className="wrapper mt-8 md:mt-10">
-            <h2 className="w-10/12 text-base font-semibold md:text-lg">Current Leadership details</h2>
-            <h6 className="mt-4 text-sm">This section lists the directors who are currently holding positions in this company. It includes the Director Identification Number (DIN), name, current designation and the date they were appointed to their current role.</h6>
+            <h2 className="w-10/12 text-base font-semibold md:text-lg">
+              Current Leadership details
+            </h2>
+            <h6 className="mt-4 text-sm">
+              This section lists the directors who are currently holding
+              positions in this company. It includes the Director Identification
+              Number (DIN), name, current designation and the date they were
+              appointed to their current role.
+            </h6>
             <div className="mt-4 w-full md:mt-4">
               <div className="relative overflow-hidden h-12 mb-2">
                 <div className="h-full w-full rounded-[inherit]">
                   <div style={{ minWidth: "100%", display: "table" }}>
-                    <div role="tablist" aria-orientation="horizontal" className="inline-flex h-9 items-center justify-center rounded-lg text-muted-foreground gap-3 bg-background" tabIndex={0}>
-                      <button type="button" role="tab" aria-selected="true" className="inline-flex cursor-pointer items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 rounded-none px-2 py-2 border-b-2 border-sky-400 text-primary">
+                    <div
+                      role="tablist"
+                      aria-orientation="horizontal"
+                      className="inline-flex h-9 items-center justify-center rounded-lg text-muted-foreground gap-3 bg-background"
+                      tabIndex={0}
+                    >
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected="true"
+                        className="inline-flex cursor-pointer items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 rounded-none px-2 py-2 border-b-2 border-sky-400 text-primary"
+                      >
                         Board Members
-                        <div className="inline-flex items-center border py-0.5 font-semibold border-transparent ml-2 rounded-full bg-sky-200 px-1.5 text-xs text-gray-900 shadow-none hover:bg-sky-200">{directorRecords.length}</div>
+                        <div className="inline-flex items-center border py-0.5 font-semibold border-transparent ml-2 rounded-full bg-sky-200 px-1.5 text-xs text-gray-900 shadow-none hover:bg-sky-200">
+                          {directorRecords.length}
+                        </div>
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
-              <div role="tabpanel" className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+              <div
+                role="tabpanel"
+                className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
                 <div className="border-0 bg-card text-card-foreground shadow overflow-hidden rounded-md">
                   <div className="relative w-full overflow-auto">
                     <table className="w-full  text-xs md:text-sm">
                       <thead className="[&>tr]:border-b">
                         <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted divide-x bg-muted">
-                          <th className="h-10 text-left align-middle p-4 font-semibold text-foreground hidden md:table-cell whitespace-nowrap">DIN</th>
-                          <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">Name</th>
-                          <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">Current Designation</th>
-                          <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">Current Date of Appointment</th>
+                          <th className="h-10 text-left align-middle p-4 font-semibold text-foreground hidden md:table-cell whitespace-nowrap">
+                            DIN
+                          </th>
+                          <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">
+                            Name
+                          </th>
+                          <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">
+                            Current Designation
+                          </th>
+                          <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">
+                            Current Date of Appointment
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         {directorRecords.length > 0 ? (
                           directorRecords.map((director, index) => (
-                            <tr key={director.DirectorDIN || index} className="divide-x hover:bg-card">
-                              <td className="p-4 align-top hidden md:table-cell border-b whitespace-nowrap">{director.DirectorDIN || "N/A"}</td>
+                            <tr
+                              key={director.DirectorDIN || index}
+                              className="divide-x hover:bg-card"
+                            >
+                              <td className="p-4 align-top hidden md:table-cell border-b whitespace-nowrap">
+                                {director.DirectorDIN || "N/A"}
+                              </td>
                               <td className="p-4 align-top border-b md:whitespace-nowrap">
-                                <Link href={`/director/${slugify(`${director.DirectorFirstName} ${director.DirectorLastName}`)}/${director.DirectorDIN}`} className="inline-flex items-center justify-center rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-primary underline-offset-4 hover:underline p-0 text-xs md:text-sm">
-                                  {`${director.DirectorFirstName || ""} ${director.DirectorLastName || ""}`.trim() || "N/A"}
+                                <Link
+                                  href={`/director/${slugify(
+                                    `${director.DirectorFirstName} ${director.DirectorLastName}`
+                                  )}/${director.DirectorDIN}`}
+                                  className="inline-flex items-center justify-center rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-primary underline-offset-4 hover:underline p-0 text-xs md:text-sm"
+                                >
+                                  {`${director.DirectorFirstName || ""} ${
+                                    director.DirectorLastName || ""
+                                  }`.trim() || "N/A"}
                                 </Link>
                               </td>
-                              <td className="p-4 align-top border-b ">{director.DirectorDesignation || "Director"}</td>
+                              <td className="p-4 align-top border-b ">
+                                {director.DirectorDesignation || "Director"}
+                              </td>
                               <td className="p-4 align-top flex border-b flex-col sm:flex-row justify-between gap-1 sm:gap-8">
-                                <span>{director.dateOfAppointment || director.dateOfIncorporation || "N/A"}</span>
-                                <Link target="_blank" rel="noopener noreferrer" href={`/unlock-contact?din=${director.DirectorDIN}`} className="flex items-center gap-1 font-semibold text-blue-600 hover:underline text-xs sm:text-sm">
-                                  <ShoppingCartIcon size={16} /> Get Contact Details
+                                <span>
+                                  {director.dateOfAppointment ||
+                                    director.dateOfIncorporation ||
+                                    "N/A"}
+                                </span>
+                                <Link
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  href={`/unlock-contact?din=${director.DirectorDIN}`}
+                                  className="flex items-center gap-1 font-semibold text-blue-600 hover:underline text-xs sm:text-sm"
+                                >
+                                  <ShoppingCartIcon size={16} /> Get Contact
+                                  Details
                                 </Link>
                               </td>
                             </tr>
                           ))
                         ) : (
-                          <tr><td colSpan="4" className="p-4 text-center text-gray-500">No current director data found.</td></tr>
+                          <tr>
+                            <td
+                              colSpan="4"
+                              className="p-4 text-center text-gray-500"
+                            >
+                              No current director data found.
+                            </td>
+                          </tr>
                         )}
                       </tbody>
                     </table>
@@ -910,23 +1146,45 @@ const CompanyClient = () => {
             </div>
           </section>
           <section className="wrapper mt-8 md:mt-10">
-            <h2 className="w-10/12 text-base font-semibold md:text-lg">Past Directors</h2>
-            <h6 className="mt-4 text-sm">This section provides information about individuals who have previously held positions in the company.</h6>
+            <h2 className="w-10/12 text-base font-semibold md:text-lg">
+              Past Directors
+            </h2>
+            <h6 className="mt-4 text-sm">
+              This section provides information about individuals who have
+              previously held positions in the company.
+            </h6>
             <div className="mt-3 w-full md:mt-5">
               <div className="bg-card text-card-foreground shadow overflow-hidden rounded-md">
                 <div className="relative w-full overflow-auto">
                   <table className="w-full caption-bottom text-xs md:text-sm">
                     <thead className="[&_tr]:border-b">
                       <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted divide-x bg-muted">
-                        <th className="h-10 text-left align-middle whitespace-nowrap p-4 font-semibold text-foreground hidden md:table-cell">DIN</th>
-                        <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">Director Name</th>
-                        <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">Previous Designation</th>
-                        <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">Previous Date of Appointment</th>
-                        <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">Cessation Date</th>
+                        <th className="h-10 text-left align-middle whitespace-nowrap p-4 font-semibold text-foreground hidden md:table-cell">
+                          DIN
+                        </th>
+                        <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">
+                          Director Name
+                        </th>
+                        <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">
+                          Previous Designation
+                        </th>
+                        <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">
+                          Previous Date of Appointment
+                        </th>
+                        <th className="h-10 text-left align-middle p-4 font-semibold text-foreground md:whitespace-nowrap">
+                          Cessation Date
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="[&_tr:last-child]:border-0">
-                      <tr><td className="align-middle p-4 text-center" colSpan="5">No past director data found.</td></tr>
+                      <tr>
+                        <td
+                          className="align-middle p-4 text-center"
+                          colSpan="5"
+                        >
+                          No past director data found.
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -949,11 +1207,19 @@ const CompanyClient = () => {
   if (error) {
     return (
       <main className="container mx-auto text-center mt-10 p-4">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <div
+          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+          role="alert"
+        >
           <strong className="font-bold">Error:</strong>
           <span className="block sm:inline ml-2">{error}</span>
         </div>
-        <Link href="/" className="mt-6 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back to Search</Link>
+        <Link
+          href="/"
+          className="mt-6 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Back to Search
+        </Link>
       </main>
     );
   }
@@ -961,11 +1227,21 @@ const CompanyClient = () => {
   if (!companyData) {
     return (
       <main className="container mx-auto text-center mt-10 p-4">
-        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+        <div
+          className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative"
+          role="alert"
+        >
           <strong className="font-bold">Not Found:</strong>
-          <span className="block sm:inline ml-2">Company data could not be loaded.</span>
+          <span className="block sm:inline ml-2">
+            Company data could not be loaded.
+          </span>
         </div>
-        <Link href="/" className="mt-6 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back to Search</Link>
+        <Link
+          href="/"
+          className="mt-6 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Back to Search
+        </Link>
       </main>
     );
   }
@@ -985,7 +1261,9 @@ const CompanyClient = () => {
                 <div className="w-full space-y-2 md:space-y-4">
                   <div className="flex flex-col items-start justify-center md:flex-row md:justify-between md:gap-8">
                     <h1 className="text-lg font-semibold text-gray-800 md:text-xl lg:text-3xl">
-                      {companyData?.CompanyName || companyData?.company || "N/A"}
+                      {companyData?.CompanyName ||
+                        companyData?.company ||
+                        "N/A"}
                     </h1>
                     <div className="flex items-center gap-2 text-[10px] text-gray-400 md:justify-end md:text-xs">
                       <p>Last updated recently</p>
@@ -993,30 +1271,66 @@ const CompanyClient = () => {
                   </div>
                   <div className="grid w-full grid-cols-1 gap-2 text-sm text-gray-700 md:grid-cols-3 md:divide-x md:text-sm lg:grid-cols-5">
                     <div className="space-y-1">
-                      <h4 className="text-[10px] text-gray-600 md:text-xs">CIN/LLPIN</h4>
-                      <p className="font-medium">{companyData?.CIN || companyData?.cin || "N/A"}</p>
+                      <h4 className="text-[10px] text-gray-600 md:text-xs">
+                        CIN/LLPIN
+                      </h4>
+                      <p className="font-medium">
+                        {companyData?.CIN || companyData?.cin || "N/A"}
+                      </p>
                     </div>
                     {companyData?.CompanyStatus ? (
                       <div className="space-y-1 md:pl-4">
-                        <h4 className="text-[10px] text-gray-600 md:text-xs">Status</h4>
+                        <h4 className="text-[10px] text-gray-600 md:text-xs">
+                          Status
+                        </h4>
                         <p className="flex items-center gap-1.5 font-medium">
-                          <span className={`size-2 flex-shrink-0 rounded-full shadow md:size-3 ${ companyData.CompanyStatus.toLowerCase() === "active" ? "bg-green-500" : companyData.CompanyStatus.toLowerCase().includes("strike") || companyData.CompanyStatus.toLowerCase().includes("dissolved") ? "bg-red-500" : "bg-yellow-500" }`}></span>
+                          <span
+                            className={`size-2 flex-shrink-0 rounded-full shadow md:size-3 ${
+                              companyData.CompanyStatus.toLowerCase() ===
+                              "active"
+                                ? "bg-green-500"
+                                : companyData.CompanyStatus.toLowerCase().includes(
+                                    "strike"
+                                  ) ||
+                                  companyData.CompanyStatus.toLowerCase().includes(
+                                    "dissolved"
+                                  )
+                                ? "bg-red-500"
+                                : "bg-yellow-500"
+                            }`}
+                          ></span>
                           {companyData.CompanyStatus}
                         </p>
                       </div>
                     ) : (
                       <div className="space-y-1 md:pl-4">
-                        <h4 className="text-[10px] text-gray-600 md:text-xs">Registration Number</h4>
-                        <p className="font-medium">{companyData?.registrationNumber || "N/A"}</p>
+                        <h4 className="text-[10px] text-gray-600 md:text-xs">
+                          Registration Number
+                        </h4>
+                        <p className="font-medium">
+                          {companyData?.registrationNumber || "N/A"}
+                        </p>
                       </div>
                     )}
                     <div className="hidden space-y-1 pl-4 md:inline-block">
-                      <h4 className="text-[10px] text-gray-600 md:text-xs">Industry</h4>
-                      <p className="font-medium line-clamp-1">{companyData?.CompanyIndustrialClassification || companyData?.mainDivisionDescription || "N/A"}</p>
+                      <h4 className="text-[10px] text-gray-600 md:text-xs">
+                        Industry
+                      </h4>
+                      <p className="font-medium line-clamp-1">
+                        {companyData?.CompanyIndustrialClassification ||
+                          companyData?.mainDivisionDescription ||
+                          "N/A"}
+                      </p>
                     </div>
                     <div className="hidden space-y-1 pl-4 lg:inline-block">
-                      <h4 className="text-[10px] text-gray-600 md:text-xs">Type</h4>
-                      <p className="font-medium">{companyData?.CompanyCategory || companyData?.companyType || "N/A"}</p>
+                      <h4 className="text-[10px] text-gray-600 md:text-xs">
+                        Type
+                      </h4>
+                      <p className="font-medium">
+                        {companyData?.CompanyCategory ||
+                          companyData?.companyType ||
+                          "N/A"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -1032,9 +1346,28 @@ const CompanyClient = () => {
             <div className="relative overflow-x-auto border-b border-gray-200">
               <div className="h-full w-full rounded-[inherit]">
                 <div style={{ minWidth: "100%", display: "table" }}>
-                  <div role="tablist" aria-orientation="horizontal" className="inline-flex h-12 items-end justify-start rounded-lg bg-muted px-2 pt-2 text-muted-foreground md:h-14" tabIndex={0} data-orientation="horizontal" style={{ outline: "none" }}>
+                  <div
+                    role="tablist"
+                    aria-orientation="horizontal"
+                    className="inline-flex h-12 items-end justify-start rounded-lg bg-muted px-2 pt-2 text-muted-foreground md:h-14"
+                    tabIndex={0}
+                    data-orientation="horizontal"
+                    style={{ outline: "none" }}
+                  >
                     {tabContent.map((tab, index) => (
-                      <button key={index} type="button" role="tab" aria-selected={activeTab === index} aria-controls={`tab-content-${index}`} className={`inline-flex cursor-pointer items-center justify-center rounded-t-md px-4 py-2.5 font-medium opacity-70 ring-offset-background transition-all hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${ activeTab === index ? "bg-white text-foreground opacity-100 shadow-sm border border-gray-200 border-b-0" : "border-transparent" } md:text-base text-sm whitespace-nowrap`} onClick={() => handleTabClick(index)}>
+                      <button
+                        key={index}
+                        type="button"
+                        role="tab"
+                        aria-selected={activeTab === index}
+                        aria-controls={`tab-content-${index}`}
+                        className={`inline-flex cursor-pointer items-center justify-center rounded-t-md px-4 py-2.5 font-medium opacity-70 ring-offset-background transition-all hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${
+                          activeTab === index
+                            ? "bg-white text-foreground opacity-100 shadow-sm border border-gray-200 border-b-0"
+                            : "border-transparent"
+                        } md:text-base text-sm whitespace-nowrap`}
+                        onClick={() => handleTabClick(index)}
+                      >
                         {tab.title}
                       </button>
                     ))}
@@ -1043,7 +1376,11 @@ const CompanyClient = () => {
               </div>
             </div>
             <div className="bg-white shadow-sm rounded-b-md">
-              <div id={`tab-content-${activeTab}`} role="tabpanel" aria-labelledby={`tab-${activeTab}`}>
+              <div
+                id={`tab-content-${activeTab}`}
+                role="tabpanel"
+                aria-labelledby={`tab-${activeTab}`}
+              >
                 {tabContent[activeTab].content}
               </div>
             </div>
@@ -1053,23 +1390,39 @@ const CompanyClient = () => {
       {companyData && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": companyData?.CompanyName || companyData?.company,
-            "identifier": companyData?.CIN || companyData?.cin,
-            "url": typeof window !== 'undefined' ? window.location.href : `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/company/${slugName}/${cinParam}`,
-            "description": (companyData?.mainDivisionDescription || `Details for ${companyData?.CompanyName || companyData?.company}`).substring(0, 5000),
-            "address": {
-              "@type": "PostalAddress",
-              "streetAddress": companyData?.streetAddress || companyData?.Registered_Office_Address,
-              "addressLocality": companyData?.city,
-              "addressRegion": companyData?.state || companyData?.CompanyStateCode,
-              "postalCode": companyData?.postalCode,
-              "addressCountry": "IN"
-            },
-            "email": companyData?.emailAddress,
-          }) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: companyData?.CompanyName || companyData?.company,
+              identifier: companyData?.CIN || companyData?.cin,
+              url:
+                typeof window !== "undefined"
+                  ? window.location.href
+                  : `${
+                      process.env.NEXT_PUBLIC_BASE_URL ||
+                      "http://localhost:3000"
+                    }/company/${slugName}/${cinParam}`,
+              description: (
+                companyData?.mainDivisionDescription ||
+                `Details for ${
+                  companyData?.CompanyName || companyData?.company
+                }`
+              ).substring(0, 5000),
+              address: {
+                "@type": "PostalAddress",
+                streetAddress:
+                  companyData?.streetAddress ||
+                  companyData?.Registered_Office_Address,
+                addressLocality: companyData?.city,
+                addressRegion:
+                  companyData?.state || companyData?.CompanyStateCode,
+                postalCode: companyData?.postalCode,
+                addressCountry: "IN",
+              },
+              email: companyData?.emailAddress,
+            }),
+          }}
         />
       )}
     </main>

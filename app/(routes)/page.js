@@ -20,6 +20,7 @@ import {
   LuLoaderCircle,
 } from "react-icons/lu";
 import { LucideLoader2 } from "lucide-react";
+import { API_PREFIX } from "lib/api-modifier";
 
 const WORDS_TO_TYPE = ["Directors", "Companies"];
 const TYPING_SPEED = 68;
@@ -28,10 +29,13 @@ const PAUSE_DURATION = 1000;
 const SUGGESTION_DEBOUNCE_TIME = 300; // Debounce time in ms
 const MIN_SEARCH_LENGTH = 3; // Minimum characters to trigger suggestions
 
+
 // --- API Endpoints ---
-const COMPANY_API_ENDPOINT = `/api/public/mca`; // Public MCA API for company search/fetch
-const DIRECTOR_API_ENDPOINT = `/api/company/getdirector`; // Personal API for director search/fetch/suggestions
-const PERSONAL_COMPANY_API_ENDPOINT = `/api/company/getcompany`; // Personal API for company fetch/suggestions
+const COMPANY_API_ENDPOINT = `${API_PREFIX}/public/mca`; // Public MCA API for company search/fetch
+const DIRECTOR_API_ENDPOINT = `${API_PREFIX}/company/getdirector`; // Personal API for director search/fetch/suggestions
+const PERSONAL_COMPANY_API_ENDPOINT = `${API_PREFIX}/company/getcompany`; // Personal API for company fetch/suggestions
+
+
 
 const faqData = [
   {

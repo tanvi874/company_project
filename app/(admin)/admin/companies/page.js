@@ -8,6 +8,7 @@ import {debounce} from 'lodash';
 import { useAuthState } from 'react-firebase-hooks/auth'; 
 import { signInWithEmailAndPassword } from "firebase/auth"; 
 import { auth } from 'lib/firebase'; 
+import { API_PREFIX } from 'lib/api-modifier';
 
 
 const ALLOWED_ADMIN_EMAILS = ["admin@gmail.com"]; 
@@ -124,8 +125,8 @@ export default function AdminCompanySearch() {
         try {
             // Assuming your getcompany API exists and works as intended
             const apiUrl = currentSearchType === 'cin'
-                ? `/api/company/getcompany?cin=${encodeURIComponent(currentSearchTerm)}`
-                : `/api/company/getcompany?name=${encodeURIComponent(currentSearchTerm)}`;
+                ? `${API_PREFIX}/company/getcompany?cin=${encodeURIComponent(currentSearchTerm)}`
+                : `${API_PREFIX}/company/getcompany?name=${encodeURIComponent(currentSearchTerm)}`;
 
             // Add Authorization Header with Firebase ID Token
             const token = await user.getIdToken();
@@ -288,7 +289,7 @@ export default function AdminCompanySearch() {
         try {
             // Add Authorization Header with Firebase ID Token
             const token = await user.getIdToken();
-            const response = await axios.delete(`/api/company/delete/${recordId}`, {
+            const response = await axios.delete(`${API_PREFIX}/company/delete/${recordId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -366,7 +367,7 @@ export default function AdminCompanySearch() {
         try {
             // Add Authorization Header with Firebase ID Token
             const token = await user.getIdToken();
-            const response = await axios.post('/api/company/upload', formData, {
+            const response = await axios.post(`${API_PREFIX}/company/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`

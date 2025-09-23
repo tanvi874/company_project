@@ -1,9 +1,10 @@
 import React from "react";
 import axios from "axios";
 import DirectorClient from "./DirectorClient"; 
+import { API_PREFIX } from "lib/api-modifier";
 
-
-const DIRECTOR_API_URL = `https://company-project-beryl.vercel.app/api/company/getdirector`; 
+const DIRECTOR_API_URL = `https://company-project-beryl.vercel.app${API_PREFIX}/company/getdirector`; 
+// `https://company-project-beryl.vercel.app/api/company/getdirector`; 
 
 // Utility function for slugifying text (can be shared or redefined)
 function slugify(text) {

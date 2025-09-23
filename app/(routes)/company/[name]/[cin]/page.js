@@ -2,12 +2,13 @@
 import React from "react";
 import axios from "axios";
 import CompanyClient from "./CompantClient"; // Assuming CompanyClient.js is in the same directory
+import { API_PREFIX } from "lib/api-modifier";
 
 // Constants defined directly in the server component for generateMetadata
 const COMPANY_API_URL =
-  process.env.NEXT_PUBLIC_COMPANY_API_URL || "/api/company/getcompany";
+  process.env.NEXT_PUBLIC_COMPANY_API_URL || `${API_PREFIX}/company/getcompany`;
 const PUBLIC_MCA_API_URL =
-  process.env.NEXT_PUBLIC_MCA_API_URL || "/api/public/mca";
+  process.env.NEXT_PUBLIC_MCA_API_URL || `${API_PREFIX}/public/mca`;
 
 // Utility function defined directly in the server component for generateMetadata
 function slugify(text) {

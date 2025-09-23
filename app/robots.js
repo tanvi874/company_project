@@ -5,9 +5,9 @@ export default function robots() {
     rules: [
       {
         userAgent: '*', // Applies to all web crawlers
-        allow: '/',     // Allow crawling of all content by default
+        // allow: '/',     // Allow crawling of all content by default
         // Add disallow rules if you have specific paths you want to block
-        // disallow: '/admin/',
+        disallow: '/',
         // disallow: '/private-area/',
       },
       // You can add more specific rules for other user agents if needed
