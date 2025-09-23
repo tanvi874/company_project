@@ -8,6 +8,7 @@ const withBundleAnalyzer = nextBundleAnalyzer({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  assetPrefix: '/micro-company-search',
   images: {
     remotePatterns: [
       {
