@@ -54,7 +54,16 @@ export default function AdminEditCompany() {
                 setOriginalData(data);
                 const initialFormData = {};
                 EDITABLE_FIELDS.forEach(field => {
-                    initialFormData[field] = data[field] ?? '';
+                    const value = data[field];
+                    // Handle cases where a field might be an object (e.g., 'state')
+                    // to prevent React errors. We'll default to an empty string for the input.
+                    if (typeof value === 'object' && value !== null) {
+                        // A better long-term solution might be to extract a specific property, like value.name
+                        console.warn(`Field '${field}' contained an object and was reset to an empty string for the form.`);
+                        initialFormData[field] = '';
+                    } else {
+                        initialFormData[field] = value ?? '';
+                    }
                 });
                 setFormData(initialFormData);
                 toast.dismiss(loadingToastId); // Dismiss loading toast on success
@@ -100,7 +109,12 @@ export default function AdminEditCompany() {
             setOriginalData(updatedData);
             const updatedFormData = {};
             EDITABLE_FIELDS.forEach(field => {
-                updatedFormData[field] = updatedData[field] ?? '';
+                const value = updatedData[field];
+                if (typeof value === 'object' && value !== null) {
+                    updatedFormData[field] = ''; // Be consistent with the initial load
+                } else {
+                    updatedFormData[field] = value ?? '';
+                }
             });
             setFormData(updatedFormData);
 

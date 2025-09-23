@@ -27,6 +27,17 @@ const formatData = (row) => {
     };
 };
 
+export async function OPTIONS(request) {
+  const origin = request.headers.get('origin');
+  const headers = {
+    'Access-Control-Allow-Origin': origin || '*', // Allow the origin of the request
+    'Access-Control-Allow-Methods': 'POST, OPTIONS', // Allow POST and OPTIONS methods
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization', // Allow Content-Type and Authorization headers
+    'Access-Control-Max-Age': '86400', // Cache preflight response for 24 hours
+  };
+
+  return new NextResponse(null, { headers });
+}
 
 export async function POST(request) {
   await dbConnect();

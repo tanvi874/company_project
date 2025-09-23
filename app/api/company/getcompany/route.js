@@ -3,6 +3,26 @@ import { NextResponse } from 'next/server';
 import dbConnect from 'lib/dbConnect'; // Use alias @ for root
 import Company from 'lib/models/companyModel';
 
+// Handle CORS preflight requests
+export async function OPTIONS(request) {
+  // Define your allowed origins
+  const allowedOrigins = ['https://company-site-56dec1.webflow.io', 'http://localhost:3000', 'http://localhost:3001']; // Add your Webflow domain and any local dev domains
+  const requestOrigin = request.headers.get('origin');
+
+  const headers = {
+    'Access-Control-Allow-Methods': 'GET, OPTIONS', // Allow GET and OPTIONS methods
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization', // IMPORTANT: Allow Authorization header
+    'Access-Control-Max-Age': '86400', // Cache preflight response for 24 hours
+  };
+
+  if (requestOrigin && allowedOrigins.includes(requestOrigin)) {
+    headers['Access-Control-Allow-Origin'] = requestOrigin;
+  }
+
+  return new NextResponse(null, { status: 204, headers }); // 204 No Content is typical for OPTIONS
+}
+
+
 export async function GET(request) {
   await dbConnect(); // Ensure DB connection
 
