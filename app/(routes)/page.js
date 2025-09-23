@@ -1169,7 +1169,7 @@ export default function Home() {
             </div>
             {/* --- End Search Area --- */}
 
-            <h2 className="max-w-4xl text-center font-medium tracking-wide text-gray-200 md:mt-14 md:text-lg ml-10">
+            <h2 className="max-w-4xl text-center font-medium tracking-wide text-gray-200 md:mt-14 md:text-lg mx-auto">
               Check out profiles of over 3M+ companies and 5M+ directors.
               Discover additional information about company financials, director
               details, and more…
@@ -1190,7 +1190,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:max-w-5xl ml-28">
+        <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:max-w-5xl">
           {[
             {
               icon: LuShieldCheck,
