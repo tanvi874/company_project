@@ -3,8 +3,8 @@ import { CheckCircle2, Lightbulb, ThumbsUp } from 'lucide-react';
 
 const About = () => {
   return (
-    <main className="container mb-20">
-        <section className="flex pt-16 wrapper min-h-44 flex-col justify-between gap-8 rounded-lg bg-muted p-2 sm:flex-row md:mt-10 md:gap-16">
+    <main className="container-fluid mb-20">
+        <section className="flex pt-16 wrapper min-h-44 flex-col justify-between rounded-lg bg-muted p-2 sm:flex-row md:mt-10 md:gap-16">
             <div className="pt-10 sm:pt-5 lg:pt-10 ml-5">
                 <h1 className="text-2xl font-bold sm:whitespace-nowrap lg:text-3xl xl:text-4xl">
                 Get <span className="text-primary">Everything</span> Your Business Needs

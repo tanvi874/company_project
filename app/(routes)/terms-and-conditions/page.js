@@ -3,7 +3,7 @@ import Link from "next/link";
 const TermsAndConditionsPage = () => {
   return (
     <div className="wrapper mb-16 mt-10">
-      <h1 className="mb-8 text-2xl font-bold mt-16">Terms and Conditions</h1>
+      <h1 className="mb-8 text-2xl font-bold pt-20">Terms and Conditions</h1>
 
       {/* Table of Contents */}
       <section className="mt-10 rounded-lg border-l-[6px] border-primary bg-gray-100 bg-muted p-6">
