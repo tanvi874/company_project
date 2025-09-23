@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Loader2, Trash2Icon } from 'lucide-react';
-import debounce from 'lodash/debounce';
+import {debounce} from 'lodash';
 import { useAuthState } from 'react-firebase-hooks/auth'; 
 import { signInWithEmailAndPassword } from "firebase/auth"; 
 import { auth } from 'lib/firebase'; 
