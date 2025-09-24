@@ -1,9 +1,11 @@
+import { API_PREFIX } from "lib/api-modifier";
+
 // Set NEXT_PUBLIC_BASE_URL in your .env.local file (e.g., NEXT_PUBLIC_BASE_URL=https://www.setindiabiz.com)
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000/companysearch';
 
 async function getCompanyUrls() {
   try {
-    const response = await fetch(`${BASE_URL}/api/sitemap/companies`, {
+    const response = await fetch(`${BASE_URL}${API_PREFIX}/sitemap/companies`, {
       next: { revalidate: 3600 } // Optional: revalidate data every hour
     });
 
