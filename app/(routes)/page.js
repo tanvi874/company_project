@@ -23,19 +23,17 @@ import { LucideLoader2 } from "lucide-react";
 import { API_PREFIX } from "lib/api-modifier";
 
 const WORDS_TO_TYPE = ["Directors", "Companies"];
-const TYPING_SPEED = 68;
-const DELETING_SPEED = 70;
-const PAUSE_DURATION = 1000;
+const TYPING_SPEED = 200;      // each character typed every 200ms
+const DELETING_SPEED = 150;    // each character deleted every 150ms
+const PAUSE_DURATION = 1500;   // pause 1.5 seconds at the full word
+
 const SUGGESTION_DEBOUNCE_TIME = 300; // Debounce time in ms
 const MIN_SEARCH_LENGTH = 3; // Minimum characters to trigger suggestions
-
 
 // --- API Endpoints ---
 const COMPANY_API_ENDPOINT = `${API_PREFIX}/public/mca`; // Public MCA API for company search/fetch
 const DIRECTOR_API_ENDPOINT = `${API_PREFIX}/company/getdirector`; // Personal API for director search/fetch/suggestions
 const PERSONAL_COMPANY_API_ENDPOINT = `${API_PREFIX}/company/getcompany`; // Personal API for company fetch/suggestions
-
-
 
 const faqData = [
   {
@@ -61,41 +59,43 @@ const faqData = [
 ];
 
 const StatsSectionJSX = () => (
-  <section
-    className="py-12 lg:py-14 xl:py-16 gap-3.5"
-    style={{ backgroundColor: "#0D2483" }}
-  >
-    <h6 className="text-center text-base text-ocean-mist md:text-lg lg:text-xl">
-      It is about delivering insightful analysis, not just numerical data..
+  <section className="py-12 lg:py-14 xl:py-16 px-4 sm:px-6 md:px-8 gap-6 bg-[#0D2483]">
+    {/* Subtitle */}
+    <h6 className="text-center text-base md:text-lg lg:text-xl text-ocean-mist max-w-3xl mx-auto">
+      It is about delivering insightful analysis, not just numerical data.
     </h6>
-    <div className="mt-8 flex flex-col justify-center text-center md:flex-row md:gap-20 lg:gap-28">
+
+    {/* Stats */}
+    <div className="mt-8 flex flex-col items-center justify-center text-center gap-6 md:flex-row md:justify-center md:gap-16 lg:gap-24">
       {/* Stat 1 */}
-      <div className="flex flex-col gap-2 md:gap-4">
-        <p className="flex items-center justify-center mx-auto gap-3 text-3xl font-bold text-primary lg:text-4xl xl:text-5xl">
+      <div className="flex flex-col gap-2 md:gap-3">
+        <p className="flex items-center justify-center gap-2 text-3xl font-bold text-primary lg:text-4xl xl:text-5xl">
           <span>1+</span>
           <span>crore</span>
         </p>
-        <p className="text-sm text-ocean-mist md:text-base lg:text-lg">
+        <p className="text-sm md:text-base lg:text-lg text-ocean-mist">
           Records
         </p>
       </div>
+
       {/* Stat 2 */}
-      <div className="flex flex-col gap-2 md:gap-4">
-        <p className="flex items-center justify-center mx-auto gap-3 text-3xl font-bold text-primary lg:text-4xl xl:text-5xl">
+      <div className="flex flex-col gap-2 md:gap-3">
+        <p className="flex items-center justify-center gap-2 text-3xl font-bold text-primary lg:text-4xl xl:text-5xl">
           <span>8+</span>
           <span>lakhs</span>
         </p>
-        <p className="text-sm text-ocean-mist md:text-base lg:text-lg">
+        <p className="text-sm md:text-base lg:text-lg text-ocean-mist">
           Companies Financial Summary
         </p>
       </div>
+
       {/* Stat 3 */}
-      <div className="flex flex-col gap-2 md:gap-4">
-        <p className="flex items-center justify-center mx-auto gap-3 text-3xl font-bold text-primary lg:text-4xl xl:text-5xl">
+      <div className="flex flex-col gap-2 md:gap-3">
+        <p className="flex items-center justify-center gap-2 text-3xl font-bold text-primary lg:text-4xl xl:text-5xl">
           <span>25.5+</span>
           <span>lakhs</span>
         </p>
-        <p className="text-sm text-ocean-mist md:text-base lg:text-lg">
+        <p className="text-sm md:text-base lg:text-lg text-ocean-mist">
           Companies Incorporation Data
         </p>
       </div>
@@ -104,53 +104,53 @@ const StatsSectionJSX = () => (
 );
 
 const DirectorProfileSectionJSX = () => (
-  <section className="wrapper py-10 md:py-14">
-    <h1 className="section-title mb-8 md:mb-12 text-center mt-2">
+  <section className="wrapper py-10 md:py-14 px-4 sm:px-6 lg:px-8">
+    {/* Section Title */}
+    <h1 className="section-title mb-8 md:mb-12 text-center mt-2 text-2xl md:text-3xl lg:text-4xl">
       Explore Indian Directors <span className="text-primary">Complete</span>{" "}
       Profile
     </h1>
-    <div className="flex w-full flex-col items-center justify-center gap-8 lg:max-w-6xl lg:mx-auto lg:flex-row lg:justify-between lg:gap-12 xl:gap-16">
+
+    <div className="flex flex-col items-center justify-center gap-8 lg:flex-row lg:justify-between lg:max-w-6xl lg:mx-auto lg:gap-12 xl:gap-16">
       {/* Text Content */}
-      <div className="lg:w-1/2 lg:pr-8">
-        <h3 className="max-w-xl text-sm font-medium text-muted-foreground md:text-lg lg:max-w-full 2xl:text-xl">
+      <div className="lg:w-1/2 lg:pr-6 xl:pr-12">
+        <h3 className="max-w-xl md:max-w-full text-sm md:text-base lg:text-lg 2xl:text-xl font-medium text-muted-foreground">
           Access personal information of both current and past directorships by
           conducting a directors search
         </h3>
+
+        {/* Features */}
         <div className="mt-6 flex flex-col gap-4 md:gap-6 lg:mt-8">
-          {/* Feature 1 */}
-          <div className="flex items-start gap-3 text-sm font-medium text-muted-foreground md:text-base">
-            <div className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-[#EFD9F9] p-1 text-[#0F172A]">
-              <LuCheck size={14} />
+          {[
+            "Stay informed about disqualified directors",
+            "Analyze a director's qualifications using their business history.",
+            "Information about the company management and structure",
+          ].map((feature, index) => (
+            <div
+              key={index}
+              className="flex items-start gap-3 text-sm md:text-base font-medium text-muted-foreground"
+            >
+              <div className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-[#EFD9F9] p-1 text-[#0F172A]">
+                <LuCheck size={14} />
+              </div>
+              <p>{feature}</p>
             </div>
-            <p>Stay informed about disqualified directors</p>
-          </div>
-          {/* Feature 2 */}
-          <div className="flex items-start gap-3 text-sm font-medium text-muted-foreground md:text-base">
-            <div className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-[#EFD9F9] p-1 text-[#0F172A]">
-              <LuCheck size={14} />
-            </div>
-            <p>{`Analyze a director's qualifications using their business history.`}</p>
-          </div>
-          {/* Feature 3 */}
-          <div className="flex items-start gap-3 text-sm font-medium text-muted-foreground md:text-base">
-            <div className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-[#EFD9F9] p-1 text-[#0F172A]">
-              <LuCheck size={14} />
-            </div>
-            <p>Information about the company management and structure</p>
-          </div>
+          ))}
         </div>
+
+        {/* Button */}
         <div className="mt-6 md:mt-8">
           <Link
-            className="inline-flex items-center justify-center whitespace-nowrap rounded text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 search-director-btn py-2 h-12 w-full gap-2 px-5 text-white transition-all duration-300 md:w-auto md:text-base"
+            className="inline-flex items-center justify-center w-full md:w-auto h-12 px-5 py-2 gap-2 text-white text-sm md:text-base font-medium rounded transition-all duration-300 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             href="/"
           >
             <LuUserSearch /> Search for all directors
           </Link>
         </div>
       </div>
+
       {/* Image Section */}
-      <div className="relative mt-8 lg:w-1/2 lg:mt-0 ">
-        {/* Added sizes prop */}
+      <div className="relative mt-8 lg:w-1/2 lg:mt-0 flex justify-center">
         <Image
           alt="Image of directors in a business office"
           loading="lazy"
@@ -167,42 +167,49 @@ const DirectorProfileSectionJSX = () => (
 );
 
 const DecisionMakerSectionJSX = () => (
-  <section className="mb-16 md:mb-20">
-    <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-600 to-blue-500 p-6 text-white shadow-md md:rounded-xl md:p-8 mx-4 md:mx-auto md:max-w-6xl">
-      <div className="flex flex-col-reverse items-center sm:flex-row">
-        <div className="z-10 mt-8 sm:w-5/12 md:mt-0">
-          <div className="relative h-auto">
+  <section className="mb-16 md:mb-20 px-4 sm:px-6 lg:px-8">
+    <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-600 to-blue-500 p-6 text-white shadow-md md:rounded-xl md:p-8 mx-auto md:max-w-6xl">
+      <div className="flex flex-col-reverse items-center sm:flex-row sm:items-center">
+        {/* Image Section */}
+        <div className="z-10 mt-8 sm:w-5/12 md:mt-0 relative">
+          <div className="relative h-auto w-full flex justify-center">
+            {/* Decorative circles */}
             <div className="absolute right-0 top-0 h-16 w-16 rounded-full bg-blue-400 opacity-50" />
             <div className="absolute bottom-0 left-0 h-24 w-24 rounded-full bg-blue-500 opacity-50" />
+
             <Image
               alt="Illustration showing contact access"
               loading="lazy"
               width={500}
               height={500}
               sizes="(max-width: 768px) 80vw, (max-width: 1024px) 40vw, 500px"
-              className="h-auto max-h-64 w-auto transform md:absolute md:left-1/2 md:top-1/2 md:max-h-80 md:-translate-x-1/2 md:-translate-y-1/2"
+              className="h-auto max-h-64 w-auto md:max-h-80 transform"
               style={{ color: "transparent" }}
               src="https://www.setindiabiz.com/assets/company-name-search/decision-contact.webp"
             />
           </div>
         </div>
+
         {/* Text Content */}
         <div className="z-10 sm:w-7/12 sm:pl-6 md:pl-10 lg:pl-16 text-center sm:text-left">
-          <h2 className="mb-4 text-xl font-semibold md:text-2xl lg:text-3xl">
+          <h2 className="mb-4 text-xl md:text-2xl lg:text-3xl font-semibold">
             Only Need to Talk to the Decision Makers?
           </h2>
-          <p className="mb-6 text-xs font-light md:text-sm">
-            {`Skip the clutter and get straight to what matters - directors' contact info from newly registered companies. Quick, direct, and perfect for focused outreach.`}
+          <p className="mb-6 text-xs md:text-sm font-light">
+            Skip the clutter and get straight to what matters - directors'
+            contact info from newly registered companies. Quick, direct, and
+            perfect for focused outreach.
           </p>
           <Link
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-100 hover:bg-secondary/80 py-2 h-12 w-full gap-2 px-5 text-sm font-bold text-blue-700 sm:w-fit lg:text-base contact-btn"
             href="/unlock-contact"
+            className="inline-flex items-center justify-center w-full sm:w-auto gap-2 px-5 py-2 h-12 rounded-md text-sm md:text-base font-bold text-blue-700 bg-gray-100 hover:bg-secondary/80 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
           >
             <LuContact className="text-lg md:text-2xl" />
-            {`Get Directors' Contact Now`}
+            Get Directors' Contact Now
           </Link>
         </div>
       </div>
+
       {/* Background decorative elements */}
       <div className="absolute right-0 top-0 -mr-32 -mt-32 h-64 w-64 rounded-full bg-blue-500 opacity-20" />
       <div className="absolute bottom-0 left-0 -mb-32 -ml-32 h-64 w-64 rounded-full bg-blue-700 opacity-20" />
@@ -212,10 +219,11 @@ const DecisionMakerSectionJSX = () => (
 
 const FAQSectionJSX = ({ data }) => (
   <section id="faq" className="wrapper w-full mb-16 md:mb-24 px-4">
-    <h2 className="section-title text-center mb-8 md:mb-12">
+    <h2 className="section-title text-center mb-8 md:mb-12 text-xl sm:text-2xl md:text-3xl lg:text-4xl">
       All You Need To Know{" "}
       <span className="block text-primary md:inline">About SetIndiaBiz</span>
     </h2>
+
     <div className="flex w-full flex-col items-center justify-center gap-3 md:flex-row md:gap-6 lg:mx-auto">
       <div className="max-w-sm md:max-w-md flex-shrink-0">
         <Image
@@ -264,7 +272,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchMode, setSearchMode] = useState("company");
   const [error, setError] = useState("");
-  const [isNavigating, setIsNavigating] = useState(false); 
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const [wordIndex, setWordIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
@@ -274,17 +282,17 @@ export default function Home() {
   const [suggestions, setSuggestions] = useState([]); // For company suggestions
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
-  const [suggestionError, setSuggestionError] = useState(""); 
+  const [suggestionError, setSuggestionError] = useState("");
 
   // --- Refs ---
-  const searchContainerRef = useRef(null); 
-  const suggestionTimeoutRef = useRef(null); 
+  const searchContainerRef = useRef(null);
+  const suggestionTimeoutRef = useRef(null);
 
   const router = useRouter();
 
   //company
   function slugify(text) {
-    if (!text) return "no-name"; 
+    if (!text) return "no-name";
     return text
       .toString()
       .toLowerCase()
@@ -958,14 +966,15 @@ export default function Home() {
   );
 
   return (
-    <main className="flex-1 min-h-screen flex flex-col">
+    <main className="flex-1 min-h-screen flex flex-col overflow-x-hidden">
       {/* === Hero Section === */}
       <section className="bg-[#0D2483]">
-        <div className="relative mb-16 pt-32 mt-4 md:pb-20 md:pt-36 lg:pt-44 xl:pt-44 px-36 md:px-16 lg:px-18 xl:px-30">
-          <div className="wrapper flex-col-bottom relative w-full text-white">
-            <h1 className="text-center text-3xl font-bold pl-8 mt-1 text-white lg:text-4xl xl:text-5xl ">
+        <div className="relative mb-16 pt-32 md:pt-36 lg:pt-44 xl:pt-44 px-4 sm:px-6 md:px-16 lg:px-20 xl:px-32">
+          <div className="flex flex-col items-center text-white w-full">
+            {/* Heading */}
+            <h1 className="text-center text-3xl font-bold mt-1 lg:text-4xl xl:text-5xl">
               Get insights about <br className="sm:hidden" /> Indian
-              <span className="font-extrabold text-primary min-h-[1.2em] inline-block">
+              <span className="font-extrabold text-primary inline-block min-h-[1.2em]">
                 &nbsp;{dynamicWord}
               </span>
               <span className="text-primary text-2xl md:text-3xl lg:text-5xl font-medium">
@@ -973,50 +982,37 @@ export default function Home() {
               </span>
             </h1>
 
-            {/* --- Search Area --- */}
+            {/* Search Area */}
             <div
-              className="w-full max-w-4xl mt-10 mb-12 md:mt-14 mx-auto"
+              className="w-full max-w-4xl mt-10 mb-12 sm:mt-14 mx-auto px-2 sm:px-0"
               id="search"
               ref={searchContainerRef}
             >
               <div className="relative">
-                <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
+                <div className="flex flex-col sm:flex-row sm:gap-4 gap-2">
                   {/* Search Mode Toggle */}
-                  <div className="w-full sm:w-auto flex-shrink-0">
+                  <div className="w-full sm:w-auto flex-shrink-0 mb-2 sm:mb-0">
                     <div
                       role="tablist"
                       aria-orientation="horizontal"
                       className="flex w-full h-12 items-center justify-center rounded-lg bg-white p-1 text-gray-700"
-                      tabIndex={-1}
                     >
-                      <button
-                        type="button"
-                        role="tab"
-                        aria-selected={searchMode === "company"}
-                        className={`inline-flex flex-1 cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-4 py-1.5 text-sm font-semibold transition-all md:text-base ${
-                          searchMode === "company"
-                            ? "bg-blue-600 text-white shadow-sm"
-                            : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
-                        }`}
-                        title="Search for Company Name/CIN"
-                        onClick={() => changeSearchMode("company")}
-                      >
-                        Company
-                      </button>
-                      <button
-                        type="button"
-                        role="tab"
-                        aria-selected={searchMode === "director"}
-                        className={`inline-flex flex-1 cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-4 py-1.5 text-sm font-semibold transition-all md:text-base ${
-                          searchMode === "director"
-                            ? "bg-blue-600 text-white shadow-sm"
-                            : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
-                        }`}
-                        title="Search for Director Name/DIN"
-                        onClick={() => changeSearchMode("director")}
-                      >
-                        Director
-                      </button>
+                      {["company", "director"].map((mode) => (
+                        <button
+                          key={mode}
+                          type="button"
+                          role="tab"
+                          aria-selected={searchMode === mode}
+                          className={`inline-flex flex-1 cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-4 py-1.5 text-sm font-semibold transition-all md:text-base ${
+                            searchMode === mode
+                              ? "bg-blue-600 text-white shadow-sm"
+                              : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+                          }`}
+                          onClick={() => changeSearchMode(mode)}
+                        >
+                          {mode === "company" ? "Company" : "Director"}
+                        </button>
+                      ))}
                     </div>
                   </div>
 
@@ -1029,7 +1025,7 @@ export default function Home() {
                     >
                       <input
                         type="text"
-                        className="h-12 w-full rounded-lg border border-input bg-white py-1 pl-4 pr-16 text-sm text-gray-900 shadow-sm transition-colors file:border-0 file:bg-transparent placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 md:px-6 md:pr-32 md:text-base"
+                        className="h-12 w-full rounded-lg border border-input bg-white py-1 pl-4 pr-16 text-sm text-gray-900 shadow-sm transition-colors placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 md:px-6 md:pr-32 md:text-base"
                         placeholder={
                           searchMode === "company"
                             ? "Search by Company Name / CIN"
@@ -1037,29 +1033,17 @@ export default function Home() {
                         }
                         value={searchTerm}
                         onChange={handleInputChange}
-                        onFocus={handleInputFocus} // Re-enable focus handler
-                        onBlur={handleBlur} // Re-enable blur handler
-                        aria-autocomplete="list" // Re-enable ARIA attribute
-                        aria-controls="suggestions-list" // Re-enable ARIA attribute
-                        // Dynamically set aria-expanded based on suggestion visibility and content
-                        aria-expanded={
-                          showSuggestions &&
-                          (isLoadingSuggestions ||
-                            suggestions.length > 0 ||
-                            !!suggestionError)
-                        }
-                        disabled={isNavigating} // Disable input while navigating
+                        onFocus={handleInputFocus}
+                        
+                        disabled={isNavigating}
                       />
                       <button
                         type="submit"
-                        className="group absolute cursor-pointer right-1.5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-0 bg-gray-100 text-center text-sm font-medium text-gray-700 ring-offset-background transition-all duration-300 hover:w-24 hover:bg-blue-100 hover:text-blue-700 hover:pr-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 md:right-2 md:hover:w-28"
-                        title="Search"
-                        disabled={
-                          isNavigating || (!searchTerm.trim() && !isNavigating)
-                        } // Also disable if input is empty
+                        className="group absolute right-1.5 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full bg-gray-100 text-gray-700 transition-all duration-300 hover:w-24 hover:bg-blue-100 hover:text-blue-700 hover:pr-2 md:right-2 md:hover:w-28"
+                        disabled={isNavigating || !searchTerm.trim()}
                       >
                         {isNavigating ? (
-                          <LucideLoader2 className="h-5 w-5 animate-spin" /> // Show loader
+                          <LucideLoader2 className="h-5 w-5 animate-spin" />
                         ) : (
                           <>
                             <LuSearch className="h-5 w-5 flex-shrink-0 transition-all duration-300" />
@@ -1071,109 +1055,75 @@ export default function Home() {
                       </button>
                     </form>
 
-                    {/* --- Suggestion Box (Handles both modes) --- */}
+                    {/* Suggestion Box */}
                     {showSuggestions && (
-                      <div
-                        id="suggestions-list"
-                        role="listbox"
-                        className="absolute z-20 mt-1 w-full rounded-md border border-gray-300 bg-white shadow-lg max-h-60 overflow-y-auto"
-                      >
-                        {/* Loading State */}
-                        {isLoadingSuggestions && (
+                      <div className="absolute z-20 mt-1 w-full rounded-md border border-gray-300 bg-white shadow-lg max-h-60 overflow-y-auto">
+                        {isLoadingSuggestions ? (
                           <div className="flex items-center justify-center p-3 text-gray-500">
                             <LuLoaderCircle className="h-5 w-5 animate-spin mr-2" />
                             Loading...
                           </div>
-                        )}
-                        {/* Error State */}
-                        {suggestionError && !isLoadingSuggestions && (
+                        ) : suggestionError ? (
                           <div className="p-3 text-sm text-red-600 text-center">
                             {suggestionError}
                           </div>
+                        ) : suggestions.length === 0 &&
+                          searchTerm.trim().length >= MIN_SEARCH_LENGTH ? (
+                          <div className="p-3 text-sm text-gray-500 text-center">
+                            No suggestions found.
+                          </div>
+                        ) : (
+                          <ul>
+                            {suggestions.map((suggestion, index) => (
+                              <li
+                                key={
+                                  suggestion.CIN ||
+                                  suggestion.DirectorDIN ||
+                                  index
+                                }
+                                role="option"
+                                className="cursor-pointer px-4 py-2 text-sm text-gray-800 hover:bg-blue-50"
+                                onMouseDown={() =>
+                                  handleSuggestionClick(suggestion)
+                                }
+                              >
+                                {searchMode === "company" ? (
+                                  <>
+                                    <span className="font-medium">
+                                      {suggestion.CompanyName}
+                                    </span>
+                                    <span className="block text-xs text-gray-500">
+                                      CIN: {suggestion.CIN}
+                                    </span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <span className="font-medium">
+                                      {`${suggestion.DirectorFirstName || ""} ${
+                                        suggestion.DirectorLastName || ""
+                                      }`.trim()}
+                                    </span>
+                                    <span className="block text-xs text-gray-500">
+                                      DIN: {suggestion.DirectorDIN}
+                                    </span>
+                                  </>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
                         )}
-                        {/* No Results State */}
-                        {!isLoadingSuggestions &&
-                          !suggestionError &&
-                          suggestions.length === 0 &&
-                          searchTerm.trim().length >= MIN_SEARCH_LENGTH && (
-                            <div className="p-3 text-sm text-gray-500 text-center">
-                              No suggestions found.
-                            </div>
-                          )}
-                        {/* Suggestions List */}
-                        {!isLoadingSuggestions &&
-                          !suggestionError &&
-                          suggestions.length > 0 && (
-                            <ul>
-                              {searchMode === "company"
-                                ? // Render Company Suggestions
-                                  suggestions.map((suggestion, index) => (
-                                    <li
-                                      key={
-                                        suggestion.CIN ||
-                                        `company-suggestion-${index}`
-                                      }
-                                      role="option"
-                                      aria-selected="false"
-                                      className="cursor-pointer px-4 py-2 text-sm text-gray-800 hover:bg-blue-50"
-                                      onMouseDown={() =>
-                                        handleSuggestionClick(suggestion)
-                                      } // Use onMouseDown
-                                    >
-                                      <span className="font-medium">
-                                        {suggestion.CompanyName}
-                                      </span>
-                                      {suggestion.CIN && (
-                                        <span className="block text-xs text-gray-500">
-                                          CIN: {suggestion.CIN}
-                                        </span>
-                                      )}
-                                    </li>
-                                  ))
-                                : // Render Director Suggestions
-                                  suggestions.map((suggestion, index) => {
-                                    const directorFullName = `${
-                                      suggestion.DirectorFirstName || ""
-                                    } ${
-                                      suggestion.DirectorLastName || ""
-                                    }`.trim();
-                                    return (
-                                      <li
-                                        key={
-                                          suggestion.DirectorDIN ||
-                                          `director-suggestion-${index}`
-                                        }
-                                        role="option"
-                                        aria-selected="false"
-                                        className="cursor-pointer px-4 py-2 text-sm text-gray-800 hover:bg-blue-50"
-                                        onMouseDown={() =>
-                                          handleSuggestionClick(suggestion)
-                                        } // Use onMouseDown
-                                      >
-                                        <span className="font-medium">
-                                          {directorFullName}
-                                        </span>
-                                        {suggestion.DirectorDIN && (
-                                          <span className="block text-xs text-gray-500">
-                                            DIN: {suggestion.DirectorDIN}
-                                          </span>
-                                        )}
-                                      </li>
-                                    );
-                                  })}
-                            </ul>
-                          )}
                       </div>
                     )}
                   </div>
                 </div>
-                {/* General Error Display */}
+
+                {/* General Error */}
                 {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
               </div>
             </div>
-            {/* --- End Search Area --- */}
 
-            <h2 className="max-w-4xl text-center font-medium tracking-wide text-gray-200 md:mt-14 md:text-lg mx-auto">
+            {/* Subheading */}
+            <h2 className="max-w-4xl text-center font-medium tracking-wide text-gray-200 mt-8 md:mt-14 md:text-lg px-4 sm:px-6 mx-auto">
               Check out profiles of over 3M+ companies and 5M+ directors.
               Discover additional information about company financials, director
               details, and more…
@@ -1183,18 +1133,19 @@ export default function Home() {
       </section>
 
       {/* === Why Choose Us Section === */}
-      <section className="space-y-6 md:space-y-6 py-10 md:py-14">
-        <div className="space-y-3 text-center mt-7">
-          <h2 className="section-title">
+      <section className="py-10 md:py-14 space-y-6">
+        {/* Section Heading */}
+        <div className="text-center space-y-3 mt-7 px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">
             Why Choose <span className="text-primary">SetIndiaBiz</span>?
           </h2>
-          <p className="section-para md:text-lg max-w-2xl mx-auto">
+          <p className="text-gray-600 md:text-lg max-w-2xl mx-auto">
             Discover the benefits of using SetIndiaBiz for your company
             compliance needs.
           </p>
         </div>
 
-        <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:max-w-5xl mx-auto">
+        <div className="grid gap-6 sm:gap-8 md:gap-10 lg:gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:max-w-5xl mx-auto px-4 sm:px-6 md:px-8">
           {[
             {
               icon: LuShieldCheck,
@@ -1215,13 +1166,15 @@ export default function Home() {
           ].map(({ icon: Icon, title, description }) => (
             <div
               key={title}
-              className="border shadow overflow-hidden rounded-md p-5 mt-4"
+              className="border shadow rounded-md p-4 sm:p-5 md:p-6 hover:shadow-lg transition-shadow duration-200 flex flex-col"
             >
-              <div className="flex items-center gap-2 mb-2 mt-2 ml-2">
-                <Icon className="text-primary h-6 w-6 flex-shrink-0" />
-                <h3 className="font-semibold">{title}</h3>
+              <div className="flex items-center gap-2 mb-2">
+                <Icon className="text-primary h-5 sm:h-6 w-5 sm:w-6 flex-shrink-0" />
+                <h3 className="font-semibold text-base sm:text-lg md:text-xl">
+                  {title}
+                </h3>
               </div>
-              <p className="text-sm text-muted-foreground ml-3">
+              <p className="text-sm sm:text-base md:text-base text-gray-500 mt-2">
                 {description}
               </p>
             </div>
@@ -1230,7 +1183,7 @@ export default function Home() {
       </section>
 
       {/* === Daily Reports Section === */}
-      <section className="wrapper mb-16 md:mb-20">
+      <section className="mb-16 md:mb-20">
         <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-600 to-blue-500 p-6 text-white shadow-md md:rounded-xl md:p-12 mt-8 mx-4 md:mx-auto md:max-w-6xl">
           <div className="flex flex-col items-center sm:flex-row">
             <div className="z-10 sm:w-7/12">

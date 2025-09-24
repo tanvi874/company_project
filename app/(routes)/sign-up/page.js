@@ -90,7 +90,7 @@ const SignUpSection = () => {
 
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[80vh] pb-16 pt-8">
+        <div className="flex flex-col items-center justify-center min-h-[80vh] pb-16 pt-8 mt-12">
             <section className="wrapper w-full lg:grid lg:grid-cols-2 lg:gap-10">
                  {/* Optional: Different Image for Sign Up */}
                 <div className="hidden lg:flex lg:items-center lg:justify-center">

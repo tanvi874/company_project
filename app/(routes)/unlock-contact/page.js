@@ -118,7 +118,6 @@ const UnlockContactContent = () => {
       setDirectorData(null); // Reset director data on new search
       setIsPaid(false); // Reset paid status on new search
 
-
       const directorApiUrl = `${API_PREFIX}/company/getdirector?${queryParam}=${encodeURIComponent(
         value
       )}`;
@@ -131,7 +130,7 @@ const UnlockContactContent = () => {
           const director = response.data.data[0]; // Assuming the first result is the primary one
           setDirectorData(director);
           setSearchDin(String(director.DirectorDIN || ""));
-          setSearchName(""); 
+          setSearchName("");
           setShowNameSearchInput(false);
           setError(null);
         } else {
@@ -183,11 +182,11 @@ const UnlockContactContent = () => {
 
   // --- Masking function ---
   const maskData = (data, type) => {
-    if (!data) return <span className="text-gray-400 italic">N/A</span>; 
+    if (!data) return <span className="text-gray-400 italic">N/A</span>;
 
     // Convert to string, trim, and remove leading quote FIRST
     let dataStr = String(data).trim().replace(/^['"]/, "");
-    const blurClasses = "filter blur-sm select-none pointer-events-none"; 
+    const blurClasses = "filter blur-sm select-none pointer-events-none";
 
     try {
       if (type === "mobile") {
@@ -306,16 +305,19 @@ const UnlockContactContent = () => {
       }`.trim();
       try {
         console.log("Creating Razorpay order...");
-        const orderResponse = await axios.post(`${API_PREFIX}/payment/create-order`, {
-          amount: PAYMENT_AMOUNT_INR * 100, // Amount in paise
-          currency: "INR",
-          receipt: `receipt_din_${dinToPay}_${Date.now()}`,
-          notes: {
-            din: dinToPay,
-            directorName: directorFullName,
-            userId: user.uid, // Include userId in notes if helpful for backend logging
-          },
-        });
+        const orderResponse = await axios.post(
+          `${API_PREFIX}/payment/create-order`,
+          {
+            amount: PAYMENT_AMOUNT_INR * 100, // Amount in paise
+            currency: "INR",
+            receipt: `receipt_din_${dinToPay}_${Date.now()}`,
+            notes: {
+              din: dinToPay,
+              directorName: directorFullName,
+              userId: user.uid, // Include userId in notes if helpful for backend logging
+            },
+          }
+        );
 
         if (!orderResponse.data?.success || !orderResponse.data.order) {
           throw new Error(
@@ -573,7 +575,7 @@ const UnlockContactContent = () => {
 
   return (
     // Return the JSX structure from the inner component
-    <main className="wrapper flex flex-col mb-7 pt-20 md:pt-24">
+    <main className="wrapper flex flex-col mb-7 pt-20 md:pt-24 overflow-x-hidden">
       {/* Top Banner Section */}
       <section className="mb-4 md:mb-6 px-4 md:px-0">
         <Link
@@ -651,237 +653,216 @@ const UnlockContactContent = () => {
               )}
 
             {/* Search Controls & Details Table */}
-            <table className="min-w-full border-collapse text-sm">
-              <tbody>
-                {/* DIN Search Row */}
-                <tr className="border-b">
-                  <th className="w-1/3 place-content-start p-2 text-left align-top font-semibold text-foreground md:p-4 md:pt-6">
-                    DIN
-                  </th>
-                  <td className="p-2 align-top md:p-4">
-                    {/* DIN Search Form */}
-                    <form
-                      onSubmit={handleDinSearch}
-                      className="flex flex-wrap items-start gap-2 sm:items-center"
-                    >
-                      <input
-                        className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:w-40"
-                        id="search-din-input"
-                        placeholder="Enter DIN"
-                        type="text"
-                        pattern="\d*" // Allow only digits
-                        inputMode="numeric" // Hint for mobile keyboards
-                        value={searchDin}
-                        onChange={(e) =>
-                          setSearchDin(e.target.value.replace(/\D/g, ""))
-                        } // Allow only digits
-                        aria-label="Director DIN Search"
-                        disabled={isProcessing}
-                      />
-                      <button
-                        type="submit"
-                        className="inline-flex cursor-pointer h-9 items-center justify-center gap-1 whitespace-nowrap rounded-lg bg-primary px-3 py-2 text-xs font-medium text-primary-foreground ring-offset-background transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 md:text-sm"
-                        aria-label="Search by DIN"
-                        disabled={isProcessing || !searchDin.trim()}
-                      >
-                        <Search className="size-4" />
-                        Search
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleReset}
-                        className="inline-flex cursor-pointer h-9 bg-red-500 text-white items-center justify-center gap-1 whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium ring-offset-background transition hover:bg-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 md:text-sm"
-                        aria-label="Reset search"
-                        disabled={isProcessing}
-                      >
-                        <RotateCcw className="size-4" />
-                        Reset
-                      </button>
-                    </form>
-
-                    {/* Toggle Name Search */}
-                    <div className="mt-2 text-xs">
-                      <p className="inline text-muted-foreground">
-                        Not sure about the DIN? <br className="sm:hidden" />{" "}
-                        Search by name instead.{" "}
-                      </p>
-                      <button
-                        className="inline cursor-pointer font-medium text-primary transition-all hover:underline disabled:cursor-not-allowed disabled:text-muted-foreground disabled:no-underline"
-                        onClick={toggleNameSearchInput}
-                        disabled={isProcessing}
-                        aria-expanded={showNameSearchInput}
-                      >
-                        Click here{" "}
-                        <ChevronRight
-                          className={`ml-0.5 inline size-4 rounded-full bg-muted p-0.5 transition-transform ${
-                            showNameSearchInput ? "rotate-90" : ""
-                          }`}
-                        />
-                      </button>
-                    </div>
-
-                    {/* Name Search Form */}
-                    {showNameSearchInput && (
+            {/* Wrap table in a responsive container */}
+            <div className="overflow-x-auto w-full">
+              <table className="min-w-full border-collapse text-sm">
+                <tbody>
+                  {/* DIN Search Row */}
+                  <tr className="border-b">
+                    <th className="w-1/3 place-content-start p-2 text-left align-top font-semibold text-foreground md:p-4 md:pt-6">
+                      DIN
+                    </th>
+                    <td className="p-2 align-top md:p-4">
+                      {/* DIN Search Form */}
                       <form
-                        onSubmit={handleNameSearch}
-                        className="mt-2 flex w-full max-w-sm items-center gap-2"
+                        onSubmit={handleDinSearch}
+                        className="flex flex-wrap items-start gap-2 sm:items-center"
                       >
                         <input
-                          className="flex h-9 flex-grow rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                          placeholder="Enter director name"
+                          className="flex h-9 w-full max-w-xs rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                          id="search-din-input"
+                          placeholder="Enter DIN"
                           type="text"
-                          value={searchName}
-                          onChange={(e) => setSearchName(e.target.value)}
-                          required
-                          aria-label="Director Name Search Input"
+                          pattern="\d*"
+                          inputMode="numeric"
+                          value={searchDin}
+                          onChange={(e) =>
+                            setSearchDin(e.target.value.replace(/\D/g, ""))
+                          }
+                          aria-label="Director DIN Search"
                           disabled={isProcessing}
                         />
                         <button
                           type="submit"
-                          className="inline-flex cursor-pointer h-9 items-center justify-center gap-1 whitespace-nowrap rounded-lg bg-primary px-3 py-2 text-xs font-medium text-primary-foreground ring-offset-background transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 md:text-sm"
-                          aria-label="Search by Name"
-                          disabled={isProcessing || !searchName.trim()}
+                          className="inline-flex h-9 items-center justify-center gap-1 whitespace-nowrap rounded-lg bg-primary px-3 py-2 text-xs font-medium text-primary-foreground transition hover:opacity-95 disabled:pointer-events-none disabled:opacity-50"
+                          aria-label="Search by DIN"
+                          disabled={isProcessing || !searchDin.trim()}
                         >
                           <Search className="size-4" />
                           Search
                         </button>
+                        <button
+                          type="button"
+                          onClick={handleReset}
+                          className="inline-flex h-9 bg-red-500 text-white items-center justify-center gap-1 whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium transition hover:bg-gray-300 disabled:pointer-events-none disabled:opacity-50"
+                          aria-label="Reset search"
+                          disabled={isProcessing}
+                        >
+                          <RotateCcw className="size-4" />
+                          Reset
+                        </button>
                       </form>
-                    )}
-                  </td>
-                </tr>
 
-                {/* --- Director Details Rows --- */}
-                <tr className="border-t border-b pt-4">
-                  <th className="p-2 pt-4 text-left align-top font-semibold text-foreground md:p-4">
-                    Director Name
-                  </th>
-                  <td className="p-2 pt-4 font-medium text-foreground md:p-4">
-                    {directorData
-                      ? `${directorData.DirectorFirstName || ""} ${
-                          directorData.DirectorLastName || ""
-                        }`.trim() || "N/A"
-                      : !error &&
+                      {/* Name Search Toggle & Form */}
+                      <div className="mt-2 text-xs">
+                        <p className="inline text-muted-foreground">
+                          Not sure about the DIN? <br className="sm:hidden" />{" "}
+                          Search by name instead.
+                        </p>
+                        <button
+                          className="inline cursor-pointer font-medium text-primary transition-all hover:underline disabled:cursor-not-allowed disabled:text-muted-foreground disabled:no-underline"
+                          onClick={toggleNameSearchInput}
+                          disabled={isProcessing}
+                          aria-expanded={showNameSearchInput}
+                        >
+                          Click here{" "}
+                          <ChevronRight
+                            className={`ml-0.5 inline size-4 rounded-full bg-muted p-0.5 transition-transform ${
+                              showNameSearchInput ? "rotate-90" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+
+                      {showNameSearchInput && (
+                        <form
+                          onSubmit={handleNameSearch}
+                          className="mt-2 flex w-full max-w-sm flex-wrap items-center gap-2"
+                        >
+                          <input
+                            className="flex h-9 flex-grow rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="Enter director name"
+                            type="text"
+                            value={searchName}
+                            onChange={(e) => setSearchName(e.target.value)}
+                            required
+                            aria-label="Director Name Search Input"
+                            disabled={isProcessing}
+                          />
+                          <button
+                            type="submit"
+                            className="inline-flex h-9 items-center justify-center gap-1 whitespace-nowrap rounded-lg bg-primary px-3 py-2 text-xs font-medium text-primary-foreground transition hover:opacity-95 disabled:pointer-events-none disabled:opacity-50"
+                            aria-label="Search by Name"
+                            disabled={isProcessing || !searchName.trim()}
+                          >
+                            <Search className="size-4" />
+                            Search
+                          </button>
+                        </form>
+                      )}
+                    </td>
+                  </tr>
+
+                  {/* Director Details Rows */}
+                  <tr className="border-t border-b pt-4">
+                    <th className="p-2 pt-4 text-left align-top font-semibold text-foreground md:p-4">
+                      Director Name
+                    </th>
+                    <td className="p-2 pt-4 font-medium text-foreground md:p-4">
+                      {directorData
+                        ? `${directorData.DirectorFirstName || ""} ${
+                            directorData.DirectorLastName || ""
+                          }`.trim() || "N/A"
+                        : !error &&
+                          !isProcessing && (
+                            <span className="text-sm text-gray-500">
+                              Please search for a director.
+                            </span>
+                          )}
+                    </td>
+                  </tr>
+
+                  <tr className="border-t border-b pt-4">
+                    <th className="p-2 pt-4 text-left align-top font-semibold text-foreground md:p-4">
+                      Director Address
+                    </th>
+                    <td className="p-2 pt-4 font-medium text-foreground md:p-4">
+                      {directorData ? (
+                        <div className="space-y-1 break-words">
+                          <p>
+                            {cleanAddressPart(
+                              directorData.DirectorPermanentAddressLine1 ||
+                                "N/A"
+                            )}{" "}
+                            {directorData.DirectorPermanentCity || "N/A"},{" "}
+                            {directorData.DirectorPermanentState || "N/A"} -{" "}
+                            {directorData.DirectorPermanentPincode || "N/A"},
+                            India
+                          </p>
+                        </div>
+                      ) : (
+                        !error &&
                         !isProcessing && (
                           <span className="text-sm text-gray-500">
-                            Please search for a director.
+                            Address details will appear here.
                           </span>
-                        )}
-                  </td>
-                </tr>
+                        )
+                      )}
+                    </td>
+                  </tr>
 
-                <tr className="border-t border-b pt-4">
-                  <th className="p-2 pt-4 text-left align-top font-semibold text-foreground md:p-4">
-                    Director Address
-                  </th>
-                  <td className="p-2 pt-4 font-medium text-foreground md:p-4">
-                    {directorData ? (
-                      <div className="space-y-1">
-                        {" "}
-                        {/* Use a div to stack address lines */}
-                        <p>
-                          {cleanAddressPart(
-                            directorData.DirectorPermanentAddressLine1 || "N/A"
-                          )}{" "}
-                          {/* <p>{directorData.DirectorPermanentAddressLine2}</p> */}
-                          {directorData.DirectorPermanentCity || "N/A"},{" "}
-                          {directorData.DirectorPermanentState || "N/A"} -{" "}
-                          {directorData.DirectorPermanentPincode || "N/A"},India
-                        </p>
-                      </div>
-                    ) : (
-                      !error &&
-                      !isProcessing && (
-                        <span className="text-sm text-gray-500">
-                          Address details will appear here.
-                        </span>
-                      )
-                    )}
-                  </td>
-                </tr>
-
-                <tr className="border-b">
-                  <th className="p-2 text-left align-top font-semibold text-foreground md:p-4">
-                    Contact Number
-                  </th>
-                  <td className="p-2 align-top text-muted-foreground md:p-4">
-                    {directorData ? (
-                      isPaid ? (
-                        // Use maskData without type to clean the string (returns JSX)
-                        <span className="font-medium text-green-700">
-                          {maskData(directorData.DirectorMobileNumber)}
-                        </span>
-                      ) : (
-                        // Masking logic remains the same
-                        <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
+                  <tr className="border-b">
+                    <th className="p-2 text-left align-top font-semibold text-foreground md:p-4">
+                      Contact Number
+                    </th>
+                    <td className="p-2 align-top text-muted-foreground md:p-4 break-words">
+                      {directorData ? (
+                        isPaid ? (
+                          <span className="font-medium text-green-700">
+                            {maskData(directorData.DirectorMobileNumber)}
+                          </span>
+                        ) : (
                           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                            {/* Pass the raw value to maskData */}
                             <FaLock className="size-4 mr-1.5 text-gray-500 flex-shrink-0" />
                             {maskData(
                               directorData.DirectorMobileNumber,
                               "mobile"
-                            )}{" "}
-                            {/* Render JSX directly */}
-                            <span className="flex items-center gap-1.5">
-                              <span className="inline-block whitespace-nowrap rounded bg-green-600 px-2 py-1 text-xs font-semibold text-white">
-                                Available
-                              </span>
-                              
-                            </span>
+                            )}
                           </div>
-                        </div>
-                      )
-                    ) : (
-                      !error &&
-                      !isProcessing && (
-                        <span className="text-sm text-gray-500">
-                          Details will appear here.
-                        </span>
-                      )
-                    )}
-                  </td>
-                </tr>
-
-                <tr className="border-b">
-                  <th className="p-2 text-left align-top font-semibold text-foreground md:p-4">
-                    Email Address
-                  </th>
-                  <td className="p-2 align-top text-muted-foreground md:p-4">
-                    {directorData ? (
-                      isPaid ? (
-                        // Use maskData without type to clean the string (returns JSX)
-                        <span className="font-medium text-green-700">
-                          {maskData(directorData.DirectorEmailAddress)}
-                        </span>
+                        )
                       ) : (
-                        <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
+                        !error &&
+                        !isProcessing && (
+                          <span className="text-sm text-gray-500">
+                            Details will appear here.
+                          </span>
+                        )
+                      )}
+                    </td>
+                  </tr>
+
+                  <tr className="border-b">
+                    <th className="p-2 text-left align-top font-semibold text-foreground md:p-4">
+                      Email Address
+                    </th>
+                    <td className="p-2 align-top text-muted-foreground md:p-4 break-words">
+                      {directorData ? (
+                        isPaid ? (
+                          <span className="font-medium text-green-700">
+                            {maskData(directorData.DirectorEmailAddress)}
+                          </span>
+                        ) : (
                           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                             <FaLock className="size-4 mr-1.5 text-gray-500 flex-shrink-0" />
                             {maskData(
                               directorData.DirectorEmailAddress,
                               "email"
-                            )}{" "}
-                            {/* Render JSX directly */}
-                            <span className="flex items-center gap-1.5">
-                              <span className="inline-block whitespace-nowrap rounded bg-green-600 px-2 py-1 text-xs font-semibold text-white">
-                                Available
-                              </span>
-                              
-                            </span>
+                            )}
                           </div>
-                        </div>
-                      )
-                    ) : (
-                      !error &&
-                      !isProcessing && (
-                        <span className="text-sm text-gray-500">
-                          Details will appear here.
-                        </span>
-                      )
-                    )}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                        )
+                      ) : (
+                        !error &&
+                        !isProcessing && (
+                          <span className="text-sm text-gray-500">
+                            Details will appear here.
+                          </span>
+                        )
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
             {/* Info List */}
             {(isPaid || (directorData && !isPaid)) && (
@@ -1060,25 +1041,57 @@ const UnlockContactContent = () => {
                      gap-3 mr-5"
           >
             {[
-              { alt: "UPI", src: "https://www.setindiabiz.com/assets/company-name-search/upi.webp", title: "UPI" },
-              { alt: "Visa", src: "https://www.setindiabiz.com/assets/company-name-search/visa.webp", title: "Visa" },
+              {
+                alt: "UPI",
+                src: "https://www.setindiabiz.com/assets/company-name-search/upi.webp",
+                title: "UPI",
+              },
+              {
+                alt: "Visa",
+                src: "https://www.setindiabiz.com/assets/company-name-search/visa.webp",
+                title: "Visa",
+              },
               {
                 alt: "MasterCard",
                 src: "https://www.setindiabiz.com/assets/company-name-search/mastercard.webp",
                 title: "MasterCard",
               },
-              { alt: "Rupay", src: "https://www.setindiabiz.com/assets/company-name-search/rupay.webp", title: "Rupay" },
-              { alt: "GPay", src: "https://www.setindiabiz.com/assets/company-name-search/gpay.webp", title: "Google Pay" },
+              {
+                alt: "Rupay",
+                src: "https://www.setindiabiz.com/assets/company-name-search/rupay.webp",
+                title: "Rupay",
+              },
+              {
+                alt: "GPay",
+                src: "https://www.setindiabiz.com/assets/company-name-search/gpay.webp",
+                title: "Google Pay",
+              },
               {
                 alt: "Net Banking",
                 src: "https://www.setindiabiz.com/assets/company-name-search/netbanking.webp",
                 title: "Net Banking",
                 className: "",
               },
-              { alt: "Amazon Pay", src: "https://www.setindiabiz.com/assets/company-name-search/amazonpay.webp", title: "Amazon Pay" },
-              { alt: "Paytm", src: "https://www.setindiabiz.com/assets/company-name-search/paytm.webp", title: "Paytm" },
-              { alt: "PhonePe", src: "https://www.setindiabiz.com/assets/company-name-search/phonepe.webp", title: "PhonePe" },
-              { alt: "MobiKwik", src: "https://www.setindiabiz.com/assets/company-name-search/mobikwik.webp", title: "MobiKwik" },
+              {
+                alt: "Amazon Pay",
+                src: "https://www.setindiabiz.com/assets/company-name-search/amazonpay.webp",
+                title: "Amazon Pay",
+              },
+              {
+                alt: "Paytm",
+                src: "https://www.setindiabiz.com/assets/company-name-search/paytm.webp",
+                title: "Paytm",
+              },
+              {
+                alt: "PhonePe",
+                src: "https://www.setindiabiz.com/assets/company-name-search/phonepe.webp",
+                title: "PhonePe",
+              },
+              {
+                alt: "MobiKwik",
+                src: "https://www.setindiabiz.com/assets/company-name-search/mobikwik.webp",
+                title: "MobiKwik",
+              },
             ].map((img) => (
               <div
                 key={img.alt}
@@ -1177,7 +1190,7 @@ const UnlockContactContent = () => {
               </p>
               <Link
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-white py-2 h-12 w-full gap-2 px-5 text-sm font-bold text-blue-700 ring-offset-background transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 sm:w-fit lg:text-base"
-                href="/unlock-contact" 
+                href="/unlock-contact"
               >
                 <FileCheck className="text-lg md:text-2xl" />
                 Get Your Daily Reports Now

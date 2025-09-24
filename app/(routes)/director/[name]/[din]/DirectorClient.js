@@ -37,8 +37,7 @@ const DetailRow = ({ label, value, isMasked = false, ctaElement = null }) => {
       <td
         className={`p-2 border align-top ${isMasked && displayValue !== "N/A"}`}
       >
-        <div className="flex justify-between items-center">
-          {" "}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <span>{displayValue}</span>
           {ctaElement}
         </div>
@@ -843,7 +842,7 @@ const DirectorClient = () => {
         </section>
 
         {/* Associations Section (Tabs) */}
-        <section className="container px-4 mt-8 md:mt-10">
+        <section className="container px-4 mt-8 md:mt-10 mx-auto">
           <h2 className="w-full text-base font-semibold md:text-lg lg:w-10/12 mb-3">
             {`${directorFullName}'s Profile and Shareholding Details`}
           </h2>
@@ -851,7 +850,7 @@ const DirectorClient = () => {
           <div dir="ltr" data-orientation="horizontal" className="w-full">
             <div
               dir="ltr"
-              className="relative overflow-hidden h-12 border-b border-gray-200"
+              className="relative overflow-x-auto h-12 border-b border-gray-200"
             >
               <div
                 data-radix-scroll-area-viewport=""

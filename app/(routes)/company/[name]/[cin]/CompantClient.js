@@ -109,7 +109,10 @@ const CompanyClient = () => {
           companyData?.CIN || companyData?.cin || cinParam || "Unknown CIN",
       };
 
-      const response = await axios.post(`${API_PREFIX}/report-change`, reportPayload);
+      const response = await axios.post(
+        `${API_PREFIX}/report-change`,
+        reportPayload
+      );
 
       if (!response.data?.success) {
         throw new Error(response.data?.message || "API failed to send report.");
@@ -374,7 +377,7 @@ const CompanyClient = () => {
     {
       title: "About",
       content: (
-        <div className="wrapper overflow-hidden">
+        <div className="wrapper overflow-hidden mb-5">
           <div className="mt-7">
             <div className="space-y-3 mt-3 md:space-y-4">
               <div className="space-y-3 divide-y md:space-y-4">
@@ -918,46 +921,37 @@ const CompanyClient = () => {
             </div>
 
             <div className="mt-10">
-              <div className="wrapper relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-600 to-blue-500  text-white shadow-md md:rounded-xl md:p-10">
-                <div className="flex flex-col items-center sm:flex-row">
-                  <div className="z-10 sm:w-7/12">
-                    <h2 className="mb-6 w-[95%] text-xl font-semibold md:text-2xl lg:text-3xl">
+              <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-600 to-blue-500 text-white shadow-md p-6 md:p-10">
+                <div className="flex flex-col lg:flex-row items-center">
+                  <div className="z-10 w-full lg:w-7/12">
+                    <h2 className="mb-4 text-xl font-semibold md:text-2xl lg:text-3xl">
                       Ready to Reach New Clients and Boost Your Business?
                     </h2>
-                    <p className="mb-8 text-xs font-light md:text-sm lg:text-base">
+                    <p className="mb-6 text-xs md:text-sm lg:text-base font-light">
                       Whether you are in sales, marketing, IT services, or
                       consulting, access exclusive data on newly registered
                       companies to stay ahead of your competition. Fresh leads
                       delivered daily to help you grow.
                     </p>
                     <Link
-                      className="inline-flex items-center bg-white justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary hover:bg-secondary/80 py-2 h-12 w-full gap-2 px-5 text-sm font-bold text-blue-700 sm:w-fit lg:text-base"
                       href="/"
+                      className="inline-flex items-center justify-center w-full sm:w-fit gap-2 px-5 py-2 rounded-md bg-white text-blue-700 font-bold text-sm md:text-base transition-colors hover:bg-white/90"
                     >
                       <LuFileSpreadsheet className="text-lg md:text-2xl" />
                       Get Your Daily Reports Now
                     </Link>
                   </div>
-                  <div className="z-10 mt-8 sm:w-5/12 md:mt-0">
-                    <div className="relative h-auto">
-                      <div className="absolute right-0 top-0 h-16 w-16 rounded-full bg-blue-400 opacity-50" />
-                      <div className="absolute bottom-0 left-0 h-24 w-24 rounded-full bg-blue-500 opacity-50" />
-                      <Image
-                        alt="Business analytics illustration"
-                        loading="lazy"
-                        width={500}
-                        height={500}
-                        decoding="async"
-                        data-nimg={1}
-                        className="h-auto max-h-64 w-auto transform md:absolute md:left-1/2 md:top-1/2 md:max-h-80 md:-translate-x-1/2 md:-translate-y-1/2"
-                        style={{ color: "transparent" }}
-                        src="https://www.setindiabiz.com/assets/company-name-search/report.webp"
-                      />
-                    </div>
+                  <div className="z-10 mt-6 lg:mt-0 w-full lg:w-5/12 relative flex justify-center">
+                    <Image
+                      alt="Business analytics illustration"
+                      loading="lazy"
+                      width={500}
+                      height={500}
+                      className="h-auto max-h-64 md:max-h-80 w-auto"
+                      src="https://www.setindiabiz.com/assets/company-name-search/report.webp"
+                    />
                   </div>
                 </div>
-                <div className="absolute right-0 top-0 -mr-32 -mt-32 h-55 w-64 rounded-full bg-blue-500 opacity-20" />
-                <div className="absolute bottom-0 left-0 -mb-32 -ml-32 h-55 w-64 rounded-full bg-blue-700 opacity-20" />
               </div>
             </div>
 
@@ -996,9 +990,9 @@ const CompanyClient = () => {
       title: "Directors",
       content: (
         <section>
-          <div className="pt-8 ml-8">
+          <div className="pt-8 wrapper">
             <h4 className="text-base font-semibold md:text-lg ">Overview</h4>
-            <div className="mt-6 grid grid-cols-2 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {[
                 {
                   label: "Board Members",
@@ -1014,11 +1008,11 @@ const CompanyClient = () => {
               ].map(({ label, value, color }) => (
                 <div
                   key={label}
-                  className="border-amber-100 bg-card text-card-foreground shadow md:p-8 space-y-1 rounded-md sm:p-6"
+                  className="bg-card text-card-foreground shadow rounded-md p-4 sm:p-6 md:p-8 flex flex-col items-start justify-center"
                 >
-                  <p className="text-sm font-normal sm:text-base">{label}</p>
+                  <p className="text-sm sm:text-base font-normal">{label}</p>
                   <p
-                    className="text-xl font-extrabold md:text-4xl lg:text-3xl"
+                    className="text-xl sm:text-2xl md:text-4xl font-extrabold mt-1"
                     style={{ color }}
                   >
                     {value}
@@ -1026,6 +1020,7 @@ const CompanyClient = () => {
                 </div>
               ))}
             </div>
+
           </div>
           <section className="wrapper mt-8 md:mt-10">
             <h2 className="w-10/12 text-base font-semibold md:text-lg">
@@ -1349,7 +1344,7 @@ const CompanyClient = () => {
                   <div
                     role="tablist"
                     aria-orientation="horizontal"
-                    className="inline-flex h-12 items-end justify-start rounded-lg bg-muted px-2 pt-2 text-muted-foreground md:h-14"
+                    className="inline-flex h-12 items-end justify-start rounded-lg bg-muted pt-2 text-muted-foreground md:h-14"
                     tabIndex={0}
                     data-orientation="horizontal"
                     style={{ outline: "none" }}
