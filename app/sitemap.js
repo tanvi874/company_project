@@ -1,5 +1,5 @@
 // Set NEXT_PUBLIC_BASE_URL in your .env.local file (e.g., NEXT_PUBLIC_BASE_URL=https://www.setindiabiz.com)
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000/companysearch';
 
 async function getCompanyUrls() {
   try {
