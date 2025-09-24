@@ -129,12 +129,7 @@ export default function AdminCompanySearch() {
                 : `${API_PREFIX}/company/getcompany?name=${encodeURIComponent(currentSearchTerm)}`;
 
             // Add Authorization Header with Firebase ID Token
-            const token = await user.getIdToken();
-            const response = await fetch(apiUrl, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const response = await fetch(apiUrl);
 
             let data;
             try {
@@ -262,7 +257,6 @@ export default function AdminCompanySearch() {
 
     // --- handleEdit (Navigate to edit page) ---
     const handleEdit = (recordId) => {
-        if (!user) return; // Check auth
         // Ensure your edit route and logic exist
         if (recordId) {
              router.push(`/admin/companies/edit/${recordId}`); // Adjust route if needed
@@ -288,12 +282,7 @@ export default function AdminCompanySearch() {
         setDeleteStatus({ loading: true, error: null, success: null });
         try {
             // Add Authorization Header with Firebase ID Token
-            const token = await user.getIdToken();
-            const response = await axios.delete(`${API_PREFIX}/company/delete/${recordId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const response = await axios.delete(`${API_PREFIX}/company/delete/${recordId}`);
 
             if (response.data?.success) {
                 setDeleteStatus({ loading: false, error: null, success: `Record ${recordId} deleted successfully.` });
@@ -313,7 +302,6 @@ export default function AdminCompanySearch() {
     // --- Manual Search Trigger (for CIN or explicit button click) ---
     const handleManualSearch = (e) => {
         if (e) e.preventDefault();
-        if (!user) return; // Check auth
         console.log("Manual search triggered");
         debouncedNameSearchRef.current.cancel();
         // Perform search only if conditions are met (avoids unnecessary API calls)
@@ -365,12 +353,9 @@ export default function AdminCompanySearch() {
         formData.append('file', selectedFile); // Key 'file' must match API
 
         try {
-            // Add Authorization Header with Firebase ID Token
-            const token = await user.getIdToken();
             const response = await axios.post(`${API_PREFIX}/company/upload`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}`
+                    'Content-Type': 'multipart/form-data'
                  },
             });
 

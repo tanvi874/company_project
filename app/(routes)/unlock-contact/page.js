@@ -39,7 +39,7 @@ import { API_PREFIX } from "lib/api-modifier";
 // import { SendMailClient } from "zeptomail";
 
 const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-const PAYMENT_AMOUNT_INR = 100; // Define amount as a constant
+const PAYMENT_AMOUNT_INR = 1; // Define amount as a constant
 
 // --- ZeptoMail Configuration ---
 // REMOVE ZeptoMail client-side config - Token should not be here
@@ -528,7 +528,7 @@ const UnlockContactContent = () => {
         setShowNameSearchInput(false);
         fetchDirectorData("din", dinToSearch);
         // Update URL without full page reload
-        router.push(`${API_PREFIX}/unlock-contact?din=${dinToSearch}`, { scroll: false });
+        router.push(`/unlock-contact?din=${dinToSearch}`, { scroll: false });
       } else {
         setError("Please enter a valid DIN (digits only) to search.");
       }
@@ -545,7 +545,7 @@ const UnlockContactContent = () => {
         setSearchDin(""); // Clear DIN when searching by name
         fetchDirectorData("name", nameToSearch);
         // Clear DIN from URL
-        router.push(`${API_PREFIX}/unlock-contact`, { scroll: false });
+        router.push(`/unlock-contact`, { scroll: false });
       } else {
         setError("Please enter a director name to search.");
       }

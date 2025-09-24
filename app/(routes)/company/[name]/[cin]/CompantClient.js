@@ -109,7 +109,7 @@ const CompanyClient = () => {
           companyData?.CIN || companyData?.cin || cinParam || "Unknown CIN",
       };
 
-      const response = await axios.post("/api/report-change", reportPayload);
+      const response = await axios.post(`${API_PREFIX}/report-change`, reportPayload);
 
       if (!response.data?.success) {
         throw new Error(response.data?.message || "API failed to send report.");

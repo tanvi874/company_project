@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
+import { API_PREFIX } from 'lib/api-modifier';
 // import { useSession } from 'next-auth/react'; // Remember auth
 
 // Define the fields you want to be editable
@@ -44,8 +45,8 @@ export default function AdminEditCompany() {
         // setSuccess(null); // Not needed if using toast
         const loadingToastId = toast.loading('Loading company data...'); // Show loading toast
 
-       
-        fetch(`/api/admin/companies/${companyId}`)
+
+        fetch(`${API_PREFIX}/admin/companies/${companyId}`)
             .then(res => {
                 if (!res.ok) throw new Error('Failed to fetch company data');
                 return res.json();
@@ -94,7 +95,7 @@ export default function AdminEditCompany() {
         const savingToastId = toast.loading('Saving changes...'); // Show saving toast
 
         try {
-            const response = await fetch(`/api/admin/companies/${companyId}`, {
+            const response = await fetch(`${API_PREFIX}/admin/companies/${companyId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
@@ -155,12 +156,21 @@ export default function AdminEditCompany() {
             {/* --- 2. Add Toaster component --- */}
             <Toaster position="top-center" reverseOrder={false} />
 
-            <h1 className="text-2xl font-bold mb-4">Edit Company: {originalData?.company || originalData?.CompanyName || companyId}</h1>
-            <p className="text-sm text-gray-600 mb-4">CIN: {originalData?.cin || originalData?.CIN}</p> {/* Added mb-4 */}
+            {/* <h1 className="text-2xl font-bold mb-4">Edit Company: {originalData?.company || originalData?.CompanyName || companyId}</h1> */}
+            <h1>
+            Edit Company: 
+            {typeof originalData?.company === "string"
+                ? originalData.company
+                : originalData?.company?.company || originalData?.CompanyName || companyId}
+            </h1>
 
-            {/* Remove old error/success messages if using toast exclusively */}
-            {/* {error && <p className="text-red-500 mb-4">Error: {error}</p>} */}
-            {/* {success && <p className="text-green-600 mb-4">{success}</p>} */}
+            {/* <p className="text-sm text-gray-600 mb-4">CIN: {originalData?.cin || originalData?.CIN}</p>  */}
+            <p className="text-sm text-gray-600 mb-4">
+            CIN: {typeof originalData?.cin === "object"
+                ? JSON.stringify(originalData.cin)
+                : originalData?.cin || originalData?.CIN}
+            </p>
+
 
             <form onSubmit={handleSubmit} className="space-y-6 border p-6 rounded-lg shadow-md">
                 {EDITABLE_FIELDS.map(field => (
