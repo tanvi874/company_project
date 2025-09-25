@@ -39,7 +39,7 @@ import { API_PREFIX } from "lib/api-modifier";
 // import { SendMailClient } from "zeptomail";
 
 const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-const PAYMENT_AMOUNT_INR = 1; // Define amount as a constant
+const PAYMENT_AMOUNT_INR = 100; // Define amount as a constant
 
 // --- ZeptoMail Configuration ---
 // REMOVE ZeptoMail client-side config - Token should not be here
