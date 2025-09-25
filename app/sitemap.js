@@ -5,7 +5,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000/comp
 
 async function getCompanyUrls() {
   try {
-    const response = await fetch(`${BASE_URL}${API_PREFIX}/sitemap/companies`, {
+    const response = await fetch(`${BASE_URL}/api/sitemap/companies`, {
       next: { revalidate: 3600 } // Optional: revalidate data every hour
     });
 
