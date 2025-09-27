@@ -23,9 +23,9 @@ import { LucideLoader2 } from "lucide-react";
 import { API_PREFIX } from "lib/api-modifier";
 
 const WORDS_TO_TYPE = ["Directors", "Companies"];
-const TYPING_SPEED = 200;      // each character typed every 200ms
-const DELETING_SPEED = 150;    // each character deleted every 150ms
-const PAUSE_DURATION = 1500;   // pause 1.5 seconds at the full word
+const TYPING_SPEED = 530;      // 0.7s per character
+const DELETING_SPEED = 500;    // smooth delete
+const PAUSE_DURATION = 4000;   // 4s pause
 
 const SUGGESTION_DEBOUNCE_TIME = 300; // Debounce time in ms
 const MIN_SEARCH_LENGTH = 3; // Minimum characters to trigger suggestions
@@ -1170,7 +1170,7 @@ export default function Home() {
             >
               <div className="flex items-center gap-2 mb-2">
                 <Icon className="text-primary h-5 sm:h-6 w-5 sm:w-6 flex-shrink-0" />
-                <h3 className="font-semibold text-base sm:text-lg md:text-xl">
+                <h3 className="font-semibold text-base sm:text-lg md:text-lg">
                   {title}
                 </h3>
               </div>
