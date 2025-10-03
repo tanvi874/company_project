@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import dbConnect from 'lib/dbConnect';
+import dbConnect from '../../../../lib/dbConnect';
 import Company from "../../../../lib/models/companyModel";
 import csvParser from 'csv-parser';
 import { Readable } from 'stream';

@@ -1,6 +1,6 @@
 // app/api/company/getcompany/route.js
 import { NextResponse } from 'next/server';
-import dbConnect from 'lib/dbConnect'; // Use alias @ for root
+import dbConnect from '../../../../lib/dbConnect'; // Use alias @ for root
 import Company from '../../../../lib/models/companyModel';
 
 // Handle CORS preflight requests
