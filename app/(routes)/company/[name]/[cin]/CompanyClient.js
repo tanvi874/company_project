@@ -1140,7 +1140,7 @@ const CompanyClient = () => {
               </div>
             </div>
           </section>
-          <section className="wrapper mt-8 md:mt-10">
+          <section className="wrapper mt-8 md:mt-10 mb-3 pb-4">
             <h2 className="w-10/12 text-base font-semibold md:text-lg">
               Past Directors
             </h2>
