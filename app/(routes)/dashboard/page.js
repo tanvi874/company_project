@@ -37,41 +37,11 @@ export const metadata = {
 };
 
 export default function Page() {
-  // --- JSON-LD Schema (safe to use here) ---
-  const dashboardSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: "Dashboard - SetIndiaBiz",
-    url: typeof window !== "undefined" ? window.location.href : "",
-    description:
-      "User dashboard showing account overview and payment history (contact unlocks).",
-    author: {
-      "@type": "Person",
-      name: user.displayName || user.email || "User",
-      identifier: user.uid,
-    },
-    mainEntity: (paymentHistory || []).map((p) => ({
-      "@type": "PaymentAction",
-      name: "Contact Unlock",
-      recipient: {
-        "@type": "Person",
-        name: p.directorName || "Unknown Director",
-      },
-      startTime: p.paymentDate || p.createdAt || undefined,
-      actionStatus:
-        p.status === "captured" || p.status === "paid"
-          ? "https://schema.org/CompletedActionStatus"
-          : "https://schema.org/FailedActionStatus",
-    })),
-  };
+  
 
   return (
     <>
-      <Script
-        type="application/ld+json"
-        id="dashboard-schema"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(dashboardSchema) }}
-      />
+      
       <DashboardClient />
     </>
   );

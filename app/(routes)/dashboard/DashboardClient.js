@@ -165,10 +165,43 @@ const DashboardPage = () => {
     return null;
   }
 
+  // --- JSON-LD Schema (safe to use here) ---
+  const dashboardSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Dashboard - SetIndiaBiz",
+    url: typeof window !== "undefined" ? window.location.href : "",
+    description:
+      "User dashboard showing account overview and payment history (contact unlocks).",
+    author: {
+      "@type": "Person",
+      name: user.displayName || user.email || "User",
+      identifier: user.uid,
+    },
+    mainEntity: (paymentHistory || []).map((p) => ({
+      "@type": "PaymentAction",
+      name: "Contact Unlock",
+      recipient: {
+        "@type": "Person",
+        name: p.directorName || "Unknown Director",
+      },
+      startTime: p.paymentDate || p.createdAt || undefined,
+      actionStatus:
+        p.status === "captured" || p.status === "paid"
+          ? "https://schema.org/CompletedActionStatus"
+          : "https://schema.org/FailedActionStatus",
+    })),
+  };
 
   // --- Render Dashboard ---
   return (
     <>
+    <Script
+        type="application/ld+json"
+        id="dashboard-schema"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(dashboardSchema) }}
+      />
+
       <div className="container-fluid px-4 sm:px-6 lg:px-8 py-8 min-h-[calc(100vh-80px)] md:mt-14">
         {/* Main content card */}
         <div className="bg-card text-card-foreground shadow-lg rounded-xl p-4 md:p-8 max-w-7xl mx-auto">
