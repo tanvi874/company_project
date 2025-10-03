@@ -18,7 +18,7 @@ import {
   LuLoader,
 } from "react-icons/lu";
 import Image from "next/image";
-import { API_PREFIX } from "lib/api-modifier";
+import { API_PREFIX } from "../../../../../lib/api-modifier";
 import Script from "next/script";
 
 // Helper component for table rows

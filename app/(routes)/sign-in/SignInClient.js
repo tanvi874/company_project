@@ -15,7 +15,7 @@ import {
   // General
   AuthErrorCodes,
 } from "firebase/auth";
-import { auth } from "lib/firebase"; // Ensure this path is correct
+import { auth } from "../../../lib/firebase"; // Ensure this path is correct
 import Script from "next/script";
 
 // --- Component ---

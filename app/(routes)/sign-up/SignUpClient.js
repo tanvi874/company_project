@@ -11,7 +11,7 @@ import {
   signInWithPopup,
   AuthErrorCodes,
 } from "firebase/auth";
-import { auth } from "lib/firebase";
+import { auth } from "../../../lib/firebase";
 import Link from "next/link";
 import Script from "next/script";
 
