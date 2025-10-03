@@ -32,7 +32,7 @@ export const metadata = {
     title: "FAQ | SetIndiaBiz",
     description:
       "Get answers to frequently asked questions about SetIndiaBiz, company search, director data, and more.",
-    images: ["https://www.setindiabiz.com/assets/home/faq-ogimage.png"],
+    images: ["https://www.setindiabiz.com/assets/home/ogimage.png"],
   },
 };
 
