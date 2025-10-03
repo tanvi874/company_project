@@ -6,7 +6,7 @@ import Company from 'lib/models/companyModel';
 
 // --- CORS Headers ---
 const corsHeaders = {
-    'Access-Control-Allow-Origin': 'https://company-site-56dec1.webflow.io', // Your Webflow domain
+    'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };

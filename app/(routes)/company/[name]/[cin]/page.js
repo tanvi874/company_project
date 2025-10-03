@@ -1,7 +1,7 @@
 // This is a Server Component (no "use client" directive)
 import React from "react";
 import axios from "axios";
-import CompanyClient from "./CompantClient"; // Assuming CompanyClient.js is in the same directory
+import CompanyClient from "./CompanyClient"; // Assuming CompanyClient.js is in the same directory
 import { API_PREFIX } from "lib/api-modifier";
 
 // Constants defined directly in the server component for generateMetadata
@@ -31,7 +31,7 @@ export async function generateMetadata({ params: paramsPromise }) { // Rename to
 
   let companyNameForMeta = slugify(slugNameParam).replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   let companyDescriptionForMeta = `View details for company with CIN: ${cin || 'N/A'}.`;
-  let pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/company/${slugify(slugNameParam)}/${cin || ''}`;
+  let pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/companysearch/company/${slugify(slugNameParam)}/${cin || ''}`;
 
   if (cin) {
     try {
@@ -74,16 +74,17 @@ export async function generateMetadata({ params: paramsPromise }) { // Rename to
       title: `${companyNameForMeta} - Company Information`,
       description: companyDescriptionForMeta.substring(0, 200), // OG descriptions can be slightly longer
       url: pageUrl,
-      siteName: 'YourSiteName', // Replace with your actual site name
+      siteName: 'Online Tax and Compliance Services for Startups and Small Business | Setindiabiz', // Replace with your actual site name
       type: 'profile', // or 'article' or 'website' depending on the content
-      // images: [ // Optional: Add an Open Graph image
-      //   {
-      //     url: 'your-default-og-image.jpg', // URL to a default image
-      //     width: 1200,
-      //     height: 630,
-      //     alt: `Profile of ${companyNameForMeta}`,
-      //   },
-      // ],
+      images: [
+        {
+          url: 'https://www.setindiabiz.com/assets/home/ogimage.png',
+          width: 1200,
+          height: 630,
+          alt: `Profile of ${companyNameForMeta}`,
+          type: 'image/png',
+        },
+      ],
     },
     
     // twitter: {

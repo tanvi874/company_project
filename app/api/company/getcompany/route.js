@@ -6,7 +6,7 @@ import Company from 'lib/models/companyModel';
 // Handle CORS preflight requests
 export async function OPTIONS(request) {
   // Define your allowed origins
-  const allowedOrigins = ['https://company-site-56dec1.webflow.io', 'http://localhost:3000', 'http://localhost:3001']; // Add your Webflow domain and any local dev domains
+  const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001']; // Add your Webflow domain and any local dev domains
   const requestOrigin = request.headers.get('origin');
 
   const headers = {

@@ -19,6 +19,7 @@ import {
 } from "react-icons/lu";
 import Image from "next/image";
 import { API_PREFIX } from "lib/api-modifier";
+import Script from "next/script";
 
 // Helper component for table rows
 const DetailRow = ({ label, value, isMasked = false, ctaElement = null }) => {
@@ -132,11 +133,9 @@ const DirectorClient = () => {
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("associated-companies");
 
-
   // API URLs - Ensure these are correct and NEXT_PUBLIC_DIRECTOR_API_URL is set in your .env.local
   const DIRECTOR_API_URL = `${API_PREFIX}/company/getdirector`;
   const COMPANY_API_URL = `${API_PREFIX}/company/getcompany`;
-
 
   const { din, name: nameSlug } = params;
 
@@ -473,7 +472,8 @@ const DirectorClient = () => {
       </div>
     );
   }
-  if (!primaryDirectorRecord && !loading) { // Check if primary record is null after loading
+  if (!primaryDirectorRecord && !loading) {
+    // Check if primary record is null after loading
     return (
       <div className="container mx-auto text-center mt-10 p-4">
         <div
@@ -481,7 +481,10 @@ const DirectorClient = () => {
           role="alert"
         >
           <strong className="font-bold">Not Found:</strong>
-          <span className="block sm:inline"> Director details could not be loaded for DIN: {din}.</span>
+          <span className="block sm:inline">
+            {" "}
+            Director details could not be loaded for DIN: {din}.
+          </span>
         </div>
         <Link
           href="/"
@@ -493,9 +496,53 @@ const DirectorClient = () => {
     );
   }
 
+  const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: directorFullName,
+    identifier: primaryDirectorRecord?.DirectorDIN || undefined,
+    jobTitle: "Director",
+    worksFor: [
+      ...associatedCompanies.map((company) => ({
+        "@type": "Organization",
+        name: company.company,
+        identifier: company.cin || undefined,
+        url: company.cin
+          ? `https://www.setindiabiz.com/company/${company.cin}`
+          : undefined,
+      })),
+      ...associatedLLPs.map((llp) => ({
+        "@type": "Organization",
+        name: llp.company,
+        identifier: llp.llpin || undefined,
+        url: llp.llpin
+          ? `https://www.setindiabiz.com/llp/${llp.llpin}`
+          : undefined,
+      })),
+    ],
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: primaryDirectorRecord?.DirectorPresentAddressLine1 || "",
+      addressLocality: primaryDirectorRecord?.DirectorPresentCity || "",
+      addressRegion: primaryDirectorRecord?.DirectorPresentState || "",
+      postalCode: primaryDirectorRecord?.DirectorPresentPincode || "",
+      addressCountry: primaryDirectorRecord?.companyOrigin || "India",
+    },
+    email: primaryDirectorRecord?.DirectorEmailAddress
+      ? "mailto:" + primaryDirectorRecord.DirectorEmailAddress
+      : undefined,
+    telephone: primaryDirectorRecord?.DirectorMobileNumber || undefined,
+    description: primaryDirectorRecord?.description || undefined,
+  };
 
   return (
     <>
+      <Script
+        type="application/ld+json"
+        id="director-schema"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+      />
+
       <main className="main bg-gray-50 pb-10">
         {/* Header Section */}
         <section className="bg-[#0D2483]">
@@ -1050,7 +1097,10 @@ const DirectorClient = () => {
                                 {record.DirectorDesignation || "Director"}
                               </td>
                               <td className="p-4 align-middle text-gray-700 whitespace-nowrap">
-                                {formatDate(record.DirectorAppointmentDate || record.dateOfIncorporation)}
+                                {formatDate(
+                                  record.DirectorAppointmentDate ||
+                                    record.dateOfIncorporation
+                                )}
                               </td>
                             </tr>
                           ))
@@ -1103,12 +1153,15 @@ const DirectorClient = () => {
                               className="transition-colors hover:bg-gray-50/50"
                             >
                               <td className="p-4 align-middle hidden md:table-cell font-mono text-gray-700">
-                                {record.llpin || record.cin || "N/A"} {/* Fallback to cin if llpin missing */}
+                                {record.llpin || record.cin || "N/A"}{" "}
+                                {/* Fallback to cin if llpin missing */}
                               </td>
                               <td className="p-4 align-middle font-medium text-gray-900">
                                 {record.llpin ? (
                                   <Link
-                                    href={`/llp/${slugify(record.company)}/${record.llpin}`} // Assuming 'company' holds LLP name
+                                    href={`/llp/${slugify(record.company)}/${
+                                      record.llpin
+                                    }`} // Assuming 'company' holds LLP name
                                     className="text-blue-600 hover:text-blue-700 hover:underline"
                                   >
                                     {record.company || "N/A"}
@@ -1122,7 +1175,10 @@ const DirectorClient = () => {
                                   "Designated Partner"}
                               </td>
                               <td className="p-4 align-middle text-gray-700 whitespace-nowrap">
-                                {formatDate(record.DirectorAppointmentDate || record.dateOfIncorporation)}
+                                {formatDate(
+                                  record.DirectorAppointmentDate ||
+                                    record.dateOfIncorporation
+                                )}
                               </td>
                             </tr>
                           ))
@@ -1183,14 +1239,18 @@ const DirectorClient = () => {
                               <td className="p-4 align-middle font-medium text-black">
                                 {record.cin ? (
                                   <Link
-                                    href={`/company/${slugify(record.company)}/${record.cin}`}
+                                    href={`/company/${slugify(
+                                      record.company
+                                    )}/${record.cin}`}
                                     className="text-blue-600 hover:text-blue-700 hover:underline"
                                   >
                                     {record.company || "N/A"}
                                   </Link>
                                 ) : record.llpin ? (
                                   <Link
-                                    href={`/llp/${slugify(record.company)}/${record.llpin}`}
+                                    href={`/llp/${slugify(record.company)}/${
+                                      record.llpin
+                                    }`}
                                     className="text-blue-600 hover:text-blue-700 hover:underline"
                                   >
                                     {record.company || "N/A"}
@@ -1262,7 +1322,8 @@ const DirectorClient = () => {
           <div className="grid grid-cols-1 gap-4 pt-6 sm:grid-cols-2 md:grid-cols-3 md:gap-5 md:pt-8 lg:grid-cols-4">
             {loadingOtherDirectors ? (
               <div className="col-span-full text-center p-4 text-gray-500">
-                <LuLoader className="animate-spin text-blue-500 text-2xl inline-block" /> Loading other directors...
+                <LuLoader className="animate-spin text-blue-500 text-2xl inline-block" />{" "}
+                Loading other directors...
               </div>
             ) : otherDirectors.length > 0 ? (
               otherDirectors.map((director) => (

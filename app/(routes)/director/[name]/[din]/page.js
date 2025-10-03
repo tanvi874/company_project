@@ -27,7 +27,7 @@ export async function generateMetadata({ params: paramsPromise }) {
 
   let directorNameForMeta = "Director Profile";
   let directorDescriptionForMeta = `View profile for director with DIN: ${din || 'N/A'}.`;
-  let pageUrl = `${DIRECTOR_API_URL}/director/${slugify(slugNameParam)}/${din || ''}`;
+  let pageUrl = `${DIRECTOR_API_URL}/companysearch/director/${slugify(slugNameParam)}/${din || ''}`;
 
   if (din) {
     try {
@@ -60,12 +60,20 @@ export async function generateMetadata({ params: paramsPromise }) {
       title: `${directorNameForMeta} - Director Information`,
       description: directorDescriptionForMeta.substring(0, 200),
       url: pageUrl,
-      siteName: 'YourSiteName', // Replace with your actual site name
+      siteName: 'Online Tax and Compliance Services for Startups and Small Business | Setindiabiz',
       type: 'profile',
       profile: {
         firstName: directorNameForMeta.split(' ')[0] || "",
         lastName: directorNameForMeta.split(' ').slice(1).join(' ') || "",
       },
+    images: [
+      {
+        url: 'https://www.setindiabiz.com/assets/home/ogimage.png',
+        width: 1200,
+        height: 630,
+        alt: `${directorNameForMeta} - Director Profile`,
+      },
+    ],
     },
   };
 }

@@ -64,10 +64,10 @@ function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
-            src="https://www.setindiabiz.com/assets/images/setindiabiz-white-logo.png"
+            src="https://www.setindiabiz.com/assets/images/sib-footer-logo.svg"
             alt="Logo"
-            width={180}
-            height={40}
+            width={200}
+            height={35}
           />
         </Link>
 
