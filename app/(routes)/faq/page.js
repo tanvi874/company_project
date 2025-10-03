@@ -37,26 +37,11 @@ export const metadata = {
 };
 
 export default function Page() {
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqItems.map((item) => ({
-      "@type": "Question",
-      name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer || "Answer coming soon...",
-      },
-    })),
-  };
+  
 
   return (
     <>
-      <Script
-        type="application/ld+json"
-        id="faq-schema"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      
 
       <FaqClient />
     </>
