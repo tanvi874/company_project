@@ -512,7 +512,7 @@ const CompanyClient = () => {
                   </div>
                   <div className="grid grid-cols-1 gap-2 pt-3 text-sm md:grid-cols-2 md:pt-4">
                     <h6 className="font-semibold text-primary">Industry:</h6>
-                    <p>
+                    <p className="break-words">
                       {companyData?.CompanyIndustrialClassification ||
                         companyData?.mainDivisionDescription ||
                         "N/A"}
@@ -1311,7 +1311,7 @@ const CompanyClient = () => {
                       <h4 className="text-[10px] text-gray-600 md:text-xs">
                         Industry
                       </h4>
-                      <p className="font-medium line-clamp-1">
+                      <p className="font-medium line-clamp-1 break-words">
                         {companyData?.CompanyIndustrialClassification ||
                           companyData?.mainDivisionDescription ||
                           "N/A"}
