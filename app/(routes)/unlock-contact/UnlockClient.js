@@ -32,9 +32,9 @@ import React, {
 } from "react";
 import Image from "next/image";
 import axios from "axios";
-import { useAuth } from "context/AuthContext"; // Import useAuth to get user ID
+import { useAuth } from "../../../context/AuthContext"; // Import useAuth to get user ID
 import { FaLock } from "react-icons/fa";
-import { API_PREFIX } from "lib/api-modifier";
+import { API_PREFIX } from "../../../lib/api-modifier";
 import Script from "next/script";
 // Import ZeptoMail client - REMOVED FROM CLIENT-SIDE
 // import { SendMailClient } from "zeptomail";

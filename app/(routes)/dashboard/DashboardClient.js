@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation"; // Keep router if you add sign-out back
-import { useAuth } from "context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 // import { signOut } from 'firebase/auth'; // Import if sign-out button is added
 // import { auth } from 'lib/firebase'; // Import if sign-out button is added
 import axios from "axios";
