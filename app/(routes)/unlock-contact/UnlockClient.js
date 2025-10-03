@@ -21,6 +21,8 @@ import {
   Check,
   Loader2,
   LockIcon,
+  CheckCircle,
+  Bell,
 } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import React, {
@@ -36,6 +38,7 @@ import { useAuth } from "../../../context/AuthContext"; // Import useAuth to get
 import { FaLock } from "react-icons/fa";
 import { API_PREFIX } from "../../../lib/api-modifier";
 import Script from "next/script";
+
 // Import ZeptoMail client - REMOVED FROM CLIENT-SIDE
 // import { SendMailClient } from "zeptomail";
 
@@ -43,7 +46,6 @@ const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
 const PAYMENT_AMOUNT_INR = 100; // Define amount as a constant
 
 // --- ZeptoMail Configuration ---
-// REMOVE ZeptoMail client-side config - Token should not be here
 // const ZEPTOMAIL_API_URL = "api.zeptomail.com/";
 // const ZEPTOMAIL_TOKEN = process.env.NEXT_PUBLIC_ZEPTOMAIL_TOKEN; // REMOVED
 // const ZEPTO_FROM_EMAIL_ADDRESS = "orders@setindiabiz.com"; // Keep for reference if needed, but not used here
@@ -574,83 +576,9 @@ const UnlockContactContent = () => {
   // Determine overall loading state for disabling inputs/buttons
   const isProcessing = isLoading || isSearching || isPaying;
 
-  const unlockServiceSchema = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: "Director Contact Unlock Service",
-    description:
-      "Unlock director contact details (mobile & email) instantly by paying ₹100 per director.",
-    provider: {
-      "@type": "Organization",
-      name: "SetIndiaBiz",
-      url: "https://www.setindiabiz.com",
-      logo: "https://www.setindiabiz.com/assets/logo.webp",
-    },
-    offers: {
-      "@type": "Offer",
-      url: "https://www.setindiabiz.com/unlock-contact",
-      priceCurrency: "INR",
-      price: "100",
-      availability: "https://schema.org/InStock",
-    },
-  };
-
-  const unlockFAQSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "How do I unlock director contact details?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Search for a director by DIN or name, then proceed with the payment form to unlock mobile and email instantly.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How much does it cost?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Each director contact unlock costs ₹100. Payment is required to view the contact details.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Will I receive a confirmation?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes, after payment, you will get a confirmation email along with unlocked contact details.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Can I unlock multiple contacts in bulk?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes, we offer special bulk purchase options for multiple director contacts.",
-        },
-      },
-    ],
-  };
 
   return (
     <>
-      <Script
-        id="unlock-service-schema"
-        type="application/ld+json"
-        strategy="afterInteractive"
-      >
-        {JSON.stringify(unlockServiceSchema)}
-      </Script>
-
-      <Script
-        id="unlock-faq-schema"
-        type="application/ld+json"
-        strategy="afterInteractive"
-      >
-        {JSON.stringify(unlockFAQSchema)}
-      </Script>
       <main className="wrapper flex flex-col mb-7 pt-20 md:pt-24 overflow-x-hidden">
         {/* Top Banner Section */}
         <section className="mb-4 md:mb-6 px-4 md:px-0">
@@ -1031,7 +959,7 @@ const UnlockContactContent = () => {
                   </label>
                   <input
                     ref={payerNameRef}
-                    className="mt-1 block h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    className="mt-1 block h-9 w-full rounded-md border border-input bg-transparent px-3 py-5 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     id="payerName"
                     placeholder="Enter Your Full Name"
                     name="payerName"
@@ -1050,7 +978,7 @@ const UnlockContactContent = () => {
                   </label>
                   <input
                     ref={payerEmailRef}
-                    className="mt-1 block h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    className="mt-1 block h-9 w-full rounded-md border border-input bg-transparent px-3 py-5 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     id="payerEmail"
                     placeholder="Enter Your Email Address"
                     name="payerEmail"
@@ -1073,7 +1001,7 @@ const UnlockContactContent = () => {
                   </label>
                   <input
                     ref={payerPhoneRef}
-                    className="mt-1 block h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    className="mt-1 block h-9 w-full rounded-md border border-input bg-transparent px-3 py-5 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     id="payerPhoneNumber"
                     placeholder="Enter Contact Number"
                     name="payerPhoneNumber"
@@ -1083,7 +1011,7 @@ const UnlockContactContent = () => {
                 </div>
                 {/* Submit Button */}
                 <button
-                  className={`relative z-0 inline-flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50 ${
+                  className={`relative z-0 inline-flex h-12 mt-4 w-full items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50 ${
                     isPaid
                       ? "cursor-not-allowed bg-green-600"
                       : "cursor-pointer bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600"
@@ -1207,6 +1135,16 @@ const UnlockContactContent = () => {
             <div className="p-2 md:p-4">
               <ul className="list-none space-y-3 text-sm text-foreground md:text-base">
                 {[
+                  {
+                    icon: CheckCircle,
+                    color: "text-green-500",
+                    text: "Information will be shown instantly on this screen only after the payment",
+                  },
+                  {
+                    icon: Bell,
+                    color: "text-yellow-500",
+                    text: "Purchase details will be sent to your email if provided during checkout", 
+                  },
                   {
                     icon: Copy,
                     color: "text-blue-500",

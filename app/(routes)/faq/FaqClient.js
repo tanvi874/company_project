@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import Script from "next/script";
 
 // FAQ data
 const faqItems = [
@@ -90,26 +89,8 @@ const FaqPage = () => {
     setOpenItemId((prevId) => (prevId === id ? null : id)); // If clicking the open one, close it (null), otherwise open the new one
   };
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqItems.map((item) => ({
-      "@type": "Question",
-      name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer || "Answer coming soon...",
-      },
-    })),
-  };
-
   return (
     <main className="container mx-auto">
-      <Script
-        type="application/ld+json"
-        id="faq-schema"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       <div className="wrapper mb-16 mt-10">
         <div className="mb-8 border-l-[6px] border-primary bg-muted p-6 pt-20">
           <h1 className="text-2xl font-bold">Frequently Asked Questions</h1>

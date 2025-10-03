@@ -1,4 +1,4 @@
-// app/(routes)/sign-up/page.js
+import Script from "next/script";
 import UnlockSection from "./UnlockClient";
 
 export const metadata = {
@@ -35,7 +35,85 @@ export const metadata = {
   },
 };
 
-
 export default function Page() {
-  return <UnlockSection />;
+  const unlockServiceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Director Contact Unlock Service",
+    description:
+      "Unlock director contact details (mobile & email) instantly by paying ₹100 per director.",
+    provider: {
+      "@type": "Organization",
+      name: "SetIndiaBiz",
+      url: "https://www.setindiabiz.com",
+      logo: "https://www.setindiabiz.com/assets/logo.webp",
+    },
+    offers: {
+      "@type": "Offer",
+      url: "https://www.setindiabiz.com/unlock-contact",
+      priceCurrency: "INR",
+      price: "100",
+      availability: "https://schema.org/InStock",
+    },
+  };
+
+  const unlockFAQSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "How do I unlock director contact details?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Search for a director by DIN or name, then proceed with the payment form to unlock mobile and email instantly.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How much does it cost?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Each director contact unlock costs ₹100. Payment is required to view the contact details.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Will I receive a confirmation?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes, after payment, you will get a confirmation email along with unlocked contact details.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Can I unlock multiple contacts in bulk?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes, we offer special bulk purchase options for multiple director contacts.",
+        },
+      },
+    ],
+  };
+
+  return (
+    <>
+      <Script
+        id="unlock-service-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+      >
+        {JSON.stringify(unlockServiceSchema)}
+      </Script>
+
+      <Script
+        id="unlock-faq-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+      >
+        {JSON.stringify(unlockFAQSchema)}
+      </Script>
+      <UnlockSection />
+    </>
+  );
 }

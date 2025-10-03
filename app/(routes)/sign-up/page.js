@@ -1,9 +1,11 @@
 // app/(routes)/sign-up/page.js
+import Script from "next/script";
 import SignUpSection from "./SignUpClient";
 
 export const metadata = {
   title: "Sign Up | SetIndiaBiz",
-  description: "Create your SetIndiaBiz account to access company search, compliance services, and business solutions. Sign up with email or Google.",
+  description:
+    "Create your SetIndiaBiz account to access company search, compliance services, and business solutions. Sign up with email or Google.",
   alternates: {
     canonical: "/companysearch/sign-up",
   },
@@ -13,7 +15,8 @@ export const metadata = {
     locale: "en_US",
     siteName: "SetIndiaBiz - Online Tax & Compliance Services",
     title: "Sign Up | SetIndiaBiz",
-    description: "Register for a free SetIndiaBiz account to explore business compliance services. Sign up with email or Google for quick access.",
+    description:
+      "Register for a free SetIndiaBiz account to explore business compliance services. Sign up with email or Google for quick access.",
     images: [
       {
         url: "https://www.setindiabiz.com/assets/home/ogimage.png",
@@ -27,13 +30,36 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Sign Up | SetIndiaBiz",
-    description: "Join SetIndiaBiz to access company search and compliance services. Sign up easily with email or Google.",
-    images: [
-      "https://www.setindiabiz.com/assets/home/ogimage.png",
-    ],
+    description:
+      "Join SetIndiaBiz to access company search and compliance services. Sign up easily with email or Google.",
+    images: ["https://www.setindiabiz.com/assets/home/ogimage.png"],
   },
 };
 
 export default function Page() {
-  return <SignUpSection />;
+  // --- JSON-LD Schema ---
+  const signUpSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Sign Up - SetIndiaBiz",
+    url: typeof window !== "undefined" ? window.location.href : "",
+    description:
+      "Sign-up page for SetIndiaBiz where new users can create an account using email/password or Google.",
+    potentialAction: {
+      "@type": "RegisterAction",
+      target: typeof window !== "undefined" ? window.location.href : "",
+      name: "User Sign Up",
+    },
+  };
+
+  return (
+    <>
+      <Script
+        type="application/ld+json"
+        id="sign-up-schema"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(signUpSchema) }}
+      />
+      <SignUpSection />
+    </>
+  );
 }

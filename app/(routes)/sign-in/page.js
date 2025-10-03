@@ -1,4 +1,5 @@
 // app/(routes)/sign-in/page.js
+import Script from "next/script";
 import LoginSection from "./SignInClient";
 
 export const metadata = {
@@ -36,5 +37,28 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <LoginSection />;
+  const signInSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Sign In - SetIndiaBiz",
+    url: typeof window !== "undefined" ? window.location.href : "",
+    description:
+      "Sign-in page for SetIndiaBiz where users can access their accounts using email/password or Google.",
+    potentialAction: {
+      "@type": "LoginAction",
+      target: typeof window !== "undefined" ? window.location.href : "",
+      name: "User Sign In",
+    },
+  };
+
+  return (
+    <>
+      <Script
+        type="application/ld+json"
+        id="sign-in-schema"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(signInSchema) }}
+      />
+      <LoginSection />
+    </>
+  );
 }

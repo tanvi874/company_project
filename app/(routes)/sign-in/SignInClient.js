@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff } from "lucide-react"; // Assuming you use lucide-react icons
+import { Eye, EyeOff } from "lucide-react";
 import {
   // Standard Email/Password
   signInWithEmailAndPassword,
@@ -15,8 +15,7 @@ import {
   // General
   AuthErrorCodes,
 } from "firebase/auth";
-import { auth } from "../../../lib/firebase"; // Ensure this path is correct
-import Script from "next/script";
+import { auth } from "../../../lib/firebase";
 
 // --- Component ---
 const LoginSection = () => {
@@ -101,27 +100,9 @@ const LoginSection = () => {
     }
   };
 
-  const signInSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: "Sign In - SetIndiaBiz",
-    url: typeof window !== "undefined" ? window.location.href : "",
-    description:
-      "Sign-in page for SetIndiaBiz where users can access their accounts using email/password or Google.",
-    potentialAction: {
-      "@type": "LoginAction",
-      target: typeof window !== "undefined" ? window.location.href : "",
-      name: "User Sign In",
-    },
-  };
   // --- Render ---
   return (
     <>
-      <Script
-        type="application/ld+json"
-        id="sign-in-schema"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(signInSchema) }}
-      />
       <div className="flex flex-col items-center justify-center min-h-[80vh] pb-16 pt-20">
         <section className="wrapper w-full lg:grid lg:grid-cols-2 lg:gap-10">
           {/* Image Section */}

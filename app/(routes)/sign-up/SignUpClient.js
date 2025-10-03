@@ -106,29 +106,9 @@ const SignUpSection = () => {
     }
   };
 
-  // --- JSON-LD Schema ---
-  const signUpSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: "Sign Up - SetIndiaBiz",
-    url: typeof window !== "undefined" ? window.location.href : "",
-    description:
-      "Sign-up page for SetIndiaBiz where new users can create an account using email/password or Google.",
-    potentialAction: {
-      "@type": "RegisterAction",
-      target: typeof window !== "undefined" ? window.location.href : "",
-      name: "User Sign Up",
-    },
-  };
-
+  
   return (
     <>
-      <Script
-        type="application/ld+json"
-        id="sign-up-schema"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(signUpSchema) }}
-      />
-
       <div className="flex flex-col items-center justify-center min-h-[80vh] pb-16 pt-8 mt-12">
         <section className="wrapper w-full lg:grid lg:grid-cols-2 lg:gap-10">
           {/* Optional: Different Image for Sign Up */}

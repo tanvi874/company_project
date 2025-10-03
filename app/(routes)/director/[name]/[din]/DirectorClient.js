@@ -19,7 +19,6 @@ import {
 } from "react-icons/lu";
 import Image from "next/image";
 import { API_PREFIX } from "../../../../../lib/api-modifier";
-import Script from "next/script";
 
 // Helper component for table rows
 const DetailRow = ({ label, value, isMasked = false, ctaElement = null }) => {
@@ -496,53 +495,8 @@ const DirectorClient = () => {
     );
   }
 
-  const personSchema = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: directorFullName,
-    identifier: primaryDirectorRecord?.DirectorDIN || undefined,
-    jobTitle: "Director",
-    worksFor: [
-      ...associatedCompanies.map((company) => ({
-        "@type": "Organization",
-        name: company.company,
-        identifier: company.cin || undefined,
-        url: company.cin
-          ? `https://www.setindiabiz.com/company/${company.cin}`
-          : undefined,
-      })),
-      ...associatedLLPs.map((llp) => ({
-        "@type": "Organization",
-        name: llp.company,
-        identifier: llp.llpin || undefined,
-        url: llp.llpin
-          ? `https://www.setindiabiz.com/llp/${llp.llpin}`
-          : undefined,
-      })),
-    ],
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: primaryDirectorRecord?.DirectorPresentAddressLine1 || "",
-      addressLocality: primaryDirectorRecord?.DirectorPresentCity || "",
-      addressRegion: primaryDirectorRecord?.DirectorPresentState || "",
-      postalCode: primaryDirectorRecord?.DirectorPresentPincode || "",
-      addressCountry: primaryDirectorRecord?.companyOrigin || "India",
-    },
-    email: primaryDirectorRecord?.DirectorEmailAddress
-      ? "mailto:" + primaryDirectorRecord.DirectorEmailAddress
-      : undefined,
-    telephone: primaryDirectorRecord?.DirectorMobileNumber || undefined,
-    description: primaryDirectorRecord?.description || undefined,
-  };
-
   return (
     <>
-      <Script
-        type="application/ld+json"
-        id="director-schema"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
-      />
-
       <main className="main bg-gray-50 pb-10">
         {/* Header Section */}
         <section className="bg-[#0D2483]">
