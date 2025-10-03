@@ -1,7 +1,7 @@
 // app/api/company/getdirector/route.js
 import { NextResponse } from 'next/server';
 import dbConnect from 'lib/dbConnect'; // Adjust path
-import Company from 'lib/models/companyModel'; // Adjust path
+import Company from '../../../../lib/models/companyModel'; // Adjust path
 
 export async function GET(request) {
   await dbConnect();

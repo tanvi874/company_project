@@ -1,7 +1,7 @@
 // app/api/sitemap/companies/route.js
 import { NextResponse } from 'next/server';
-import dbConnect from 'lib/dbConnect';
-import Company from 'lib/models/companyModel';
+import dbConnect from '../../../../lib/dbConnect';
+import Company from '../../../../lib/models/companyModel';
 
 export async function GET(request) {
   await dbConnect();

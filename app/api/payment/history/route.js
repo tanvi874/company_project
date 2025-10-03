@@ -1,7 +1,7 @@
 // app/api/payment/history/route.js
 import { NextResponse } from 'next/server';
-import dbConnect from 'lib/dbConnect';
-import Payment from 'lib/models/Payment'; 
+import dbConnect from '../../../../lib/dbConnect';
+import Payment from '../../../../lib/models/Payment'; 
 
 export async function GET(request) {
   await dbConnect();

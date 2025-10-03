@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
-import dbConnect from "lib/dbConnect";
-import Payment from "lib/models/Payment"; // Adjust path as needed
+import dbConnect from "../../../../lib/dbConnect";
+import Payment from "../../../../lib/models/Payment"; // Adjust path as needed
 import Razorpay from "razorpay"; // Needed to fetch order details
-import Company from "lib/models/companyModel"; // Import the Company model (Adjust path as needed)
+import Company from "../../../../lib/models/companyModel"; // Import the Company model (Adjust path as needed)
 
 export async function POST(request) {
   // --- Environment Variable Access & Validation ---

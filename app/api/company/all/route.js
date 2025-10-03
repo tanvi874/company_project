@@ -1,7 +1,7 @@
 // app/api/company/all/route.js (Example path)
 import { NextResponse } from 'next/server';
 import dbConnect from 'lib/dbConnect';
-import Company from 'lib/models/companyModel';
+import Company from '../../../../lib/models/companyModel';
 
 export async function GET(request) {
   await dbConnect();

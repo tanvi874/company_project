@@ -2,7 +2,7 @@ import dbConnect from 'lib/dbConnect';
 import { NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 
-import Company from 'lib/models/companyModel';
+import Company from '../../../../../lib/models/companyModel';
 
 // --- CORS Headers ---
 const corsHeaders = {
