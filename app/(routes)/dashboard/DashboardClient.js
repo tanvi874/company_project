@@ -17,6 +17,7 @@ import {
   LogOut,
 } from "lucide-react"; // Added LogOut for potential sign-out button
 import { API_PREFIX } from "../../../lib/api-modifier";
+import Script from "next/script";
 
 // --- Fetch Payment History Function (Uses actual API call) ---
 const fetchPaymentHistory = async (userId) => {
