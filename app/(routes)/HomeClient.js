@@ -21,7 +21,6 @@ import {
 } from "react-icons/lu";
 import { LucideLoader2 } from "lucide-react";
 import { API_PREFIX } from "../../lib/api-modifier";
-import Script from "next/script";
 
 const WORDS_TO_TYPE = ["Directors", "Companies"];
 const TYPING_SPEED = 530; // 0.7s per character
@@ -966,122 +965,8 @@ export default function Home() {
     ]
   );
 
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "SetIndiaBiz",
-    url: "https://www.setindiabiz.com",
-    logo: "https://www.setindiabiz.com/assets/logo.webp",
-    sameAs: [
-      "https://www.facebook.com/setindiabiz",
-      "https://www.linkedin.com/company/setindiabiz",
-      "https://twitter.com/setindiabiz",
-    ],
-    contactPoint: [
-      {
-        "@type": "ContactPoint",
-        telephone: "+91-XXXXXXXXXX",
-        contactType: "Customer Support",
-        email: "help@setindiabiz.com",
-      },
-    ],
-  };
-
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": "https://www.setindiabiz.com",
-    },
-    headline: "SetIndiaBiz - Company & Director Insights",
-    image: [
-      "https://www.setindiabiz.com/assets/company-name-search/directors.webp",
-    ],
-    datePublished: "2024-01-01T08:00:00+08:00",
-    dateModified: "2025-01-01T09:00:00+08:00",
-    author: {
-      "@type": "Organization",
-      name: "SetIndiaBiz",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "SetIndiaBiz",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://www.setindiabiz.com/assets/logo.webp",
-      },
-    },
-    description:
-      "SetIndiaBiz provides comprehensive information on Indian companies and directors. Search by company name, CIN, director name, or DIN to access insights and director contact information.",
-  };
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "What can I find on SetIndiaBiz?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "SetIndiaBiz provides comprehensive data on Indian companies and directors, including incorporation details, director profiles.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How do I search for companies and directors?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "You can search for companies and directors using the search bar on our homepage. Enter the company name, CIN, or director name/DIN to get started.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Is the basic company profile free?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes, we offer a basic company profile for free, which includes essential details. More in-depth information is available with our premium subscriptions.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How do I contact SetIndiaBiz's support team?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "You can contact our support team via email at help@setindiabiz.com or through the contact form on our website.",
-        },
-      },
-    ],
-  };
-
   return (
     <>
-      <Script
-        id="organization-schema"
-        type="application/ld+json"
-        strategy="afterInteractive"
-      >
-        {JSON.stringify(organizationSchema)}
-      </Script>
-
-      <Script
-        id="article-schema"
-        type="application/ld+json"
-        strategy="afterInteractive"
-      >
-        {JSON.stringify(articleSchema)}
-      </Script>
-
-      {/* FAQ Schema */}
-      <Script
-        id="faq-schema"
-        type="application/ld+json"
-        strategy="afterInteractive"
-      >
-        {JSON.stringify(faqSchema)}
-      </Script>
-
       <main className="flex-1 min-h-screen flex flex-col overflow-x-hidden">
         {/* === Hero Section === */}
         <section className="bg-[#0D2483]">
