@@ -1,7 +1,7 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import "./globals.css";
-import { AuthProvider } from 'context/AuthContext';
+import { AuthProvider } from '../context/AuthContext';
 
 export const metadata = {
   metadataBase: new URL("https://www.setindiabiz.com"),
