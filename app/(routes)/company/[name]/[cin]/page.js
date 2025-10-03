@@ -2,7 +2,7 @@
 import React from "react";
 import axios from "axios";
 import CompanyClient from "./CompanyClient"; // Assuming CompanyClient.js is in the same directory
-import { API_PREFIX } from "lib/api-modifier";
+import { API_PREFIX } from "../../../../../lib/api-modifier";
 
 // Constants defined directly in the server component for generateMetadata
 const COMPANY_API_URL =
