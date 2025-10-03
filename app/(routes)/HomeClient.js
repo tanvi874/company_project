@@ -20,7 +20,7 @@ import {
   LuLoaderCircle,
 } from "react-icons/lu";
 import { LucideLoader2 } from "lucide-react";
-import { API_PREFIX } from "lib/api-modifier";
+import { API_PREFIX } from "../../lib/api-modifier";
 import Script from "next/script";
 
 const WORDS_TO_TYPE = ["Directors", "Companies"];

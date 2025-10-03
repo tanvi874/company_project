@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
-import { API_PREFIX } from 'lib/api-modifier';
+import { API_PREFIX } from '../../../../../../lib/api-modifier';
 // import { useSession } from 'next-auth/react'; // Remember auth
 
 // Define the fields you want to be editable

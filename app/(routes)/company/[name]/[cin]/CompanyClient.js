@@ -19,7 +19,7 @@ import {
   LuLoader,
 } from "react-icons/lu";
 import axios from "axios";
-import { API_PREFIX } from "lib/api-modifier";
+import { API_PREFIX } from "../../../../../lib/api-modifier";
 
 // Constants defined directly in the client component
 const COMPANY_API_URL =

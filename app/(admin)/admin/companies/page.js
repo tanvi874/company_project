@@ -6,8 +6,8 @@ import axios from "axios";
 import { Loader2, Trash2Icon } from "lucide-react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "lib/firebase";
-import { API_PREFIX } from "lib/api-modifier";
+import { auth } from "../../../../lib/firebase";
+import { API_PREFIX } from "../../../../lib/api-modifier";
 
 const ALLOWED_ADMIN_EMAILS = ["admin@gmail.com"];
 
