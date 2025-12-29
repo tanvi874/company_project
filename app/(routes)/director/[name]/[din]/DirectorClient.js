@@ -122,6 +122,7 @@ function slugify(text) {
 
 // Main Component
 const DirectorClient = () => {
+  const params = useParams();
   const router = useRouter();
 
   const [directorData, setDirectorData] = useState([]);
@@ -135,10 +136,7 @@ const DirectorClient = () => {
   const DIRECTOR_API_URL = `${API_PREFIX}/company/getdirector`;
   const COMPANY_API_URL = `${API_PREFIX}/company/getcompany`;
 
-  const params = useParams() || {};
-  const din = params?.din ? String(params.din) : null;
-  const nameSlug = params?.name ? String(params.name) : null;
-
+  const { din, name: nameSlug } = params;
 
   const cleanAddressPart = (part) => {
     if (typeof part === "string" && part.startsWith("'")) {
