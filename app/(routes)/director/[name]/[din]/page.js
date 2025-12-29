@@ -1,12 +1,6 @@
 import React from "react";
 import axios from "axios";
 import DirectorClient from "./DirectorClient";
-import { API_PREFIX } from "../../../../../lib/api-modifier";
-import Script from "next/script";
-
-
-
-
 
 export default function DirectorPage() {
   // const personSchema = {
