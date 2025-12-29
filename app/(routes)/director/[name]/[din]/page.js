@@ -21,163 +21,51 @@ function slugify(text) {
     .replace(/-+$/, "");
 }
 
-export async function generateMetadata({ params: paramsPromise }) {
-  const params = await paramsPromise; // Await the params object
-  const din = params.din ? decodeURIComponent(params.din) : null;
-  const slugNameParam = params.name
-    ? decodeURIComponent(params.name)
-    : "director";
 
-  let directorNameForMeta = "Director Profile";
-  let directorDescriptionForMeta = `View profile for director with DIN: ${
-    din || "N/A"
-  }.`;
-  let pageUrl = `${DIRECTOR_API_URL}/companysearch/director/${slugify(
-    slugNameParam
-  )}/${din || ""}`;
 
-  if (din) {
-    try {
-      const response = await axios.get(DIRECTOR_API_URL, {
-        params: {
-          din,
-          fields: "DirectorFirstName,DirectorLastName,DirectorDesignation",
-        },
-      });
-
-      if (
-        response.data?.success &&
-        Array.isArray(response.data.data) &&
-        response.data.data.length > 0
-      ) {
-        const details = response.data.data[0];
-        const firstName = details.DirectorFirstName || "";
-        const lastName = details.DirectorLastName || "";
-        directorNameForMeta =
-          `${firstName} ${lastName}`.trim() || directorNameForMeta;
-        directorDescriptionForMeta = `Profile of ${directorNameForMeta}, ${
-          details.DirectorDesignation || "Director"
-        }. DIN: ${din}. Learn about their associations and professional background.`;
-      } else {
-        console.warn(
-          `Metadata: No director details found for DIN ${din} from ${DIRECTOR_API_URL}. Using fallback.`
-        );
-      }
-    } catch (error) {
-      console.warn(
-        `Metadata fetch error for director DIN ${din}: ${error.message}. Using fallback metadata.`
-      );
-    }
-  }
-
-  return {
-    title: `${directorNameForMeta} - Director Profile | DIN: ${din || "N/A"}`,
-    description: directorDescriptionForMeta.substring(0, 160),
-    keywords: [
-      directorNameForMeta,
-      din,
-      "director profile",
-      "corporate leadership",
-      "company director",
-      "board member",
-    ]
-      .filter(Boolean)
-      .join(", "),
-    alternates: {
-      canonical: pageUrl,
-    },
-    openGraph: {
-      title: `${directorNameForMeta} - Director Information`,
-      description: directorDescriptionForMeta.substring(0, 200),
-      url: pageUrl,
-      siteName:
-        "Online Tax and Compliance Services for Startups and Small Business | Setindiabiz",
-      type: "profile",
-      profile: {
-        firstName: directorNameForMeta.split(" ")[0] || "",
-        lastName: directorNameForMeta.split(" ").slice(1).join(" ") || "",
-      },
-      images: [
-        {
-          url: "https://www.setindiabiz.com/assets/home/ogimage.png",
-          width: 1200,
-          height: 630,
-          alt: `${directorNameForMeta} - Director Profile`,
-        },
-      ],
-    },
-  };
-}
-
-export default async function DirectorPage({ params: paramsPromise }) {
-  const params = await paramsPromise;
-  const din = params.din ? decodeURIComponent(params.din) : null;
-
-  let directorFullName = "";
-  let primaryDirectorRecord = null;
-  let associatedCompanies = [];
-  let associatedLLPs = [];
-
-  if (din) {
-    try {
-      const response = await axios.get(DIRECTOR_API_URL, { params: { din } });
-      if (response.data?.success && response.data.data?.length > 0) {
-        primaryDirectorRecord = response.data.data[0];
-        directorFullName = `${primaryDirectorRecord.DirectorFirstName || ""} ${primaryDirectorRecord.DirectorLastName || ""}`.trim();
-        associatedCompanies = response.data.associatedCompanies || [];
-        associatedLLPs = response.data.associatedLLPs || [];
-      }
-    } catch (error) {
-      console.warn(`DirectorPage: Error fetching data for DIN ${din}`, error.message);
-    }
-  }
-
-  const personSchema = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: directorFullName,
-    identifier: primaryDirectorRecord?.DirectorDIN || undefined,
-    jobTitle: "Director",
-    worksFor: [
-      ...associatedCompanies.map((company) => ({
-        "@type": "Organization",
-        name: company.company,
-        identifier: company.cin || undefined,
-        url: company.cin
-          ? `https://www.setindiabiz.com/company/${company.cin}`
-          : undefined,
-      })),
-      ...associatedLLPs.map((llp) => ({
-        "@type": "Organization",
-        name: llp.company,
-        identifier: llp.llpin || undefined,
-        url: llp.llpin
-          ? `https://www.setindiabiz.com/llp/${llp.llpin}`
-          : undefined,
-      })),
-    ],
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: primaryDirectorRecord?.DirectorPresentAddressLine1 || "",
-      addressLocality: primaryDirectorRecord?.DirectorPresentCity || "",
-      addressRegion: primaryDirectorRecord?.DirectorPresentState || "",
-      postalCode: primaryDirectorRecord?.DirectorPresentPincode || "",
-      addressCountry: primaryDirectorRecord?.companyOrigin || "India",
-    },
-    email: primaryDirectorRecord?.DirectorEmailAddress
-      ? "mailto:" + primaryDirectorRecord.DirectorEmailAddress
-      : undefined,
-    telephone: primaryDirectorRecord?.DirectorMobileNumber || undefined,
-    description: primaryDirectorRecord?.description || undefined,
-  };
+export default function DirectorPage() {
+  // const personSchema = {
+  //   "@context": "https://schema.org",
+  //   "@type": "Person",
+  //   name: directorFullName,
+  //   identifier: primaryDirectorRecord?.DirectorDIN || undefined,
+  //   jobTitle: "Director",
+  //   worksFor: [
+  //     ...associatedCompanies.map((company) => ({
+  //       "@type": "Organization",
+  //       name: company.company,
+  //       identifier: company.cin || undefined,
+  //       url: company.cin
+  //         ? `https://www.setindiabiz.com/company/${company.cin}`
+  //         : undefined,
+  //     })),
+  //     ...associatedLLPs.map((llp) => ({
+  //       "@type": "Organization",
+  //       name: llp.company,
+  //       identifier: llp.llpin || undefined,
+  //       url: llp.llpin
+  //         ? `https://www.setindiabiz.com/llp/${llp.llpin}`
+  //         : undefined,
+  //     })),
+  //   ],
+  //   address: {
+  //     "@type": "PostalAddress",
+  //     streetAddress: primaryDirectorRecord?.DirectorPresentAddressLine1 || "",
+  //     addressLocality: primaryDirectorRecord?.DirectorPresentCity || "",
+  //     addressRegion: primaryDirectorRecord?.DirectorPresentState || "",
+  //     postalCode: primaryDirectorRecord?.DirectorPresentPincode || "",
+  //     addressCountry: primaryDirectorRecord?.companyOrigin || "India",
+  //   },
+  //   email: primaryDirectorRecord?.DirectorEmailAddress
+  //     ? "mailto:" + primaryDirectorRecord.DirectorEmailAddress
+  //     : undefined,
+  //   telephone: primaryDirectorRecord?.DirectorMobileNumber || undefined,
+  //   description: primaryDirectorRecord?.description || undefined,
+  // };
 
   return (
     <>
-      <Script
-        type="application/ld+json"
-        id="director-schema"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
-      />
+      {/* <Script type="application/ld+json" id="director-schema" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}/> */}
       <DirectorClient />
     </>
   );
