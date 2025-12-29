@@ -21,55 +21,6 @@ function slugify(text) {
     .replace(/-+$/, "");
 }
 
-export async function generateMetadata({ params: paramsPromise }) {
-  const params = await paramsPromise; // Await the params object
-  const din = params.din ? decodeURIComponent(params.din) : null;
-  const slugNameParam = params.name
-    ? decodeURIComponent(params.name)
-    : "director";
-
-  let directorNameForMeta = "Director Profile";
-  let directorDescriptionForMeta = `View profile for director with DIN: ${
-    din || "N/A"
-  }.`;
-  let pageUrl = `${DIRECTOR_API_URL}/companysearch/director/${slugify(
-    slugNameParam
-  )}/${din || ""}`;
-
-  if (din) {
-    try {
-      const response = await axios.get(DIRECTOR_API_URL, {
-        params: {
-          din,
-          fields: "DirectorFirstName,DirectorLastName,DirectorDesignation",
-        },
-      });
-
-      if (
-        response.data?.success &&
-        Array.isArray(response.data.data) &&
-        response.data.data.length > 0
-      ) {
-        const details = response.data.data[0];
-        const firstName = details.DirectorFirstName || "";
-        const lastName = details.DirectorLastName || "";
-        directorNameForMeta =
-          `${firstName} ${lastName}`.trim() || directorNameForMeta;
-        directorDescriptionForMeta = `Profile of ${directorNameForMeta}, ${
-          details.DirectorDesignation || "Director"
-        }. DIN: ${din}. Learn about their associations and professional background.`;
-      } else {
-        console.warn(
-          `Metadata: No director details found for DIN ${din} from ${DIRECTOR_API_URL}. Using fallback.`
-        );
-      }
-    } catch (error) {
-      console.warn(
-        `Metadata fetch error for director DIN ${din}: ${error.message}. Using fallback metadata.`
-      );
-    }
-  }
-
   return {
     title: `${directorNameForMeta} - Director Profile | DIN: ${din || "N/A"}`,
     description: directorDescriptionForMeta.substring(0, 160),
