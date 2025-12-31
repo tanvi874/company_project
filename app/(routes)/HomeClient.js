@@ -1149,7 +1149,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid gap-6 sm:gap-8 md:gap-10 lg:gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:max-w-5xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="grid gap-6 sm:gap-8 md:gap-10 lg:gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
             {[
               {
                 icon: LuShieldCheck,
