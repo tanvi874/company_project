@@ -28,7 +28,7 @@ const DELETING_SPEED = 500; // smooth delete
 const PAUSE_DURATION = 4000; // 4s pause
 
 const SUGGESTION_DEBOUNCE_TIME = 300; // Debounce time in ms
-const MIN_SEARCH_LENGTH = 3; // Minimum characters to trigger suggestions
+const MIN_SEARCH_LENGTH = 2; // Minimum characters to trigger suggestions
 
 // --- API Endpoints ---
 const COMPANY_API_ENDPOINT = `${API_PREFIX}/public/mca`; // Public MCA API for company search/fetch
