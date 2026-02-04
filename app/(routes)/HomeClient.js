@@ -528,6 +528,9 @@ export default function Home() {
     }
   };
 
+  const isCinSearch =
+  /^[LU]\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i.test(query);
+
   // --- fetchSuggestions ---
   const fetchSuggestions = useCallback(
     async (query) => {
@@ -544,7 +547,10 @@ export default function Home() {
       setSuggestionError("");
       setShowSuggestions(true);
 
-      const params = { name: query };
+      const params = isCinSearch
+        ? { cin: query.toUpperCase() }
+        : { name: query };
+
       let finalSuggestions = []; // Store final list
       let suggestionsSource = null; // Track source
 
