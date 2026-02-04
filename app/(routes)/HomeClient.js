@@ -529,15 +529,13 @@ export default function Home() {
   };
 
  
-
-// --- fetchSuggestions ---
-const fetchSuggestions = useCallback(
+ const fetchSuggestions = useCallback(
   async (query) => {
     // ======================
-    // INPUT DETECTION
+    // DETECT SEARCH TYPE
     // ======================
-    const isCinSearch = /^[LU]/i.test(query);        // ❌ DO NOT CHANGE
-    const isDinSearch = /^\d{4,}$/.test(query);      // ✅ DIN (numbers only)
+    const isCinSearch = /^[LU]/i.test(query);      // ❌ DO NOT CHANGE
+    const isDinSearch = /^\d{6,}$/.test(query);    // ✅ DIN only numbers
 
     if (!query || query.length < MIN_SEARCH_LENGTH) {
       setSuggestions([]);
@@ -550,107 +548,16 @@ const fetchSuggestions = useCallback(
     setSuggestionError("");
     setShowSuggestions(true);
 
-    // CIN logic SAME, DIN name ke through jayega
-    const params = isCinSearch
-      ? { cin: query.toUpperCase() }
-      : { name: query };
-
     let finalSuggestions = [];
 
-    // ======================
-    // COMPANY MODE
-    // ======================
-    if (searchMode === "company") {
-      /* ======================
-         1️⃣ PERSONAL API
-      ====================== */
+    /* =====================================================
+       👉 DIN SEARCH (ALWAYS DIRECTOR API)
+    ===================================================== */
+    if (isDinSearch) {
       try {
-        const personalResponse = await axios.get(
-          PERSONAL_COMPANY_API_ENDPOINT,
-          { params }
-        );
-
-        const personalData = personalResponse.data?.data;
-
-        if (
-          personalResponse.data?.success &&
-          Array.isArray(personalData) &&
-          personalData.length > 0
-        ) {
-          finalSuggestions.push(
-            ...personalData
-              .filter(
-                (c) =>
-                  c.CompanyName &&
-                  (c.CIN || c.DIN) // ✅ CIN or DIN
-              )
-              .map((c) => ({
-                CompanyName: c.CompanyName,
-                CIN: c.CIN || null,
-                DIN: c.DIN || null,
-                source: "personal",
-              }))
-          );
-        }
-      } catch (err) {
-        console.log("Personal API: no results");
-      }
-
-      /* ======================
-         2️⃣ PUBLIC API
-      ====================== */
-      try {
-        const publicResponse = await axios.get(
-          COMPANY_API_ENDPOINT,
-          { params }
-        );
-
-        const publicData = publicResponse.data?.data;
-
-        if (
-          publicResponse.data?.success &&
-          Array.isArray(publicData) &&
-          publicData.length > 0
-        ) {
-          finalSuggestions.push(
-            ...publicData
-              .filter(
-                (c) =>
-                  (c.CompanyName || c.company) &&
-                  (c.CIN || c.cin || c.DIN)
-              )
-              .map((c) => ({
-                CompanyName: c.CompanyName || c.company,
-                CIN: c.CIN || c.cin || null,
-                DIN: c.DIN || null,
-                source: "public",
-              }))
-          );
-        }
-      } catch (err) {
-        console.log("Public API: no results");
-      }
-
-      /* ======================
-         3️⃣ DEDUPLICATE (CIN > DIN)
-      ====================== */
-      const uniqueSuggestions = Object.values(
-        finalSuggestions.reduce((acc, item) => {
-          const key = item.CIN || item.DIN;
-          if (key && !acc[key]) acc[key] = item;
-          return acc;
-        }, {})
-      );
-
-      setSuggestions(uniqueSuggestions);
-    }
-
-    // ======================
-    // DIRECTOR MODE (UNCHANGED)
-    // ======================
-    else {
-      try {
-        const response = await axios.get(DIRECTOR_API_ENDPOINT, { params });
+        const response = await axios.get(DIRECTOR_API_ENDPOINT, {
+          params: { din: query }, // ✅ FIX
+        });
 
         if (response.data?.success && Array.isArray(response.data.data)) {
           const uniqueDirectors = Object.values(
@@ -667,6 +574,118 @@ const fetchSuggestions = useCallback(
           setSuggestions([]);
         }
       } catch (err) {
+        setSuggestions([]);
+        setSuggestionError("Failed to load director suggestions.");
+      }
+
+      setIsLoadingSuggestions(false);
+      return; // ⛔ STOP HERE
+    }
+
+    /* =====================================================
+       👉 COMPANY SEARCH (CIN / NAME)
+    ===================================================== */
+    const params = isCinSearch
+      ? { cin: query.toUpperCase() }
+      : { name: query };
+
+    if (searchMode === "company") {
+      /* ======================
+         PERSONAL API
+      ====================== */
+      try {
+        const personalResponse = await axios.get(
+          PERSONAL_COMPANY_API_ENDPOINT,
+          { params }
+        );
+
+        const personalData = personalResponse.data?.data;
+
+        if (
+          personalResponse.data?.success &&
+          Array.isArray(personalData) &&
+          personalData.length > 0
+        ) {
+          finalSuggestions.push(
+            ...personalData
+              .filter(c => c.CompanyName && c.CIN)
+              .map(c => ({
+                CompanyName: c.CompanyName,
+                CIN: c.CIN,
+                source: "personal",
+              }))
+          );
+        }
+      } catch {
+        console.log("Personal API empty");
+      }
+
+      /* ======================
+         PUBLIC API
+      ====================== */
+      try {
+        const publicResponse = await axios.get(
+          COMPANY_API_ENDPOINT,
+          { params }
+        );
+
+        const publicData = publicResponse.data?.data;
+
+        if (
+          publicResponse.data?.success &&
+          Array.isArray(publicData) &&
+          publicData.length > 0
+        ) {
+          finalSuggestions.push(
+            ...publicData
+              .filter(c => (c.CompanyName || c.company) && (c.CIN || c.cin))
+              .map(c => ({
+                CompanyName: c.CompanyName || c.company,
+                CIN: c.CIN || c.cin,
+                source: "public",
+              }))
+          );
+        }
+      } catch {
+        console.log("Public API empty");
+      }
+
+      /* ======================
+         DEDUPE BY CIN
+      ====================== */
+      const unique = Object.values(
+        finalSuggestions.reduce((acc, item) => {
+          if (item.CIN && !acc[item.CIN]) acc[item.CIN] = item;
+          return acc;
+        }, {})
+      );
+
+      setSuggestions(unique);
+    }
+
+    /* =====================================================
+       👉 DIRECTOR NAME SEARCH (NORMAL)
+    ===================================================== */
+    else {
+      try {
+        const response = await axios.get(DIRECTOR_API_ENDPOINT, {
+          params: { name: query },
+        });
+
+        if (response.data?.success && Array.isArray(response.data.data)) {
+          const uniqueDirectors = Object.values(
+            response.data.data.reduce((acc, dir) => {
+              if (dir.DirectorDIN && !acc[dir.DirectorDIN]) {
+                acc[dir.DirectorDIN] = dir;
+              }
+              return acc;
+            }, {})
+          );
+          setSuggestions(uniqueDirectors);
+        } else {
+          setSuggestions([]);
+        }
+      } catch {
         setSuggestions([]);
         setSuggestionError("Failed to load director suggestions.");
       }
