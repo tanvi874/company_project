@@ -528,13 +528,15 @@ export default function Home() {
     }
   };
 
-  const isCinSearch =
-  /^[LU]\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i.test(query);
+ 
 
   // --- fetchSuggestions ---
   const fetchSuggestions = useCallback(
     async (query) => {
       // --- Input Validation ---
+       const isCinSearch =
+  /^[LU]\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i.test(query);
+      
       if (!query || query.length < MIN_SEARCH_LENGTH) {
         setSuggestions([]);
         setShowSuggestions(false);
