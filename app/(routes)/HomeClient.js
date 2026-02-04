@@ -530,12 +530,8 @@ export default function Home() {
 
  
 
-  // --- fetchSuggestions ---
-const fetchSuggestions = useCallback(
+ const fetchSuggestions = useCallback(
   async (query) => {
-    // --- Input Validation ---
-    const isCinSearch = /^[LU]/i.test(query);
-
     if (!query || query.length < MIN_SEARCH_LENGTH) {
       setSuggestions([]);
       setShowSuggestions(false);
@@ -543,112 +539,119 @@ const fetchSuggestions = useCallback(
       return;
     }
 
+    // --- Detect patterns ---
+    const isFullCin =
+      /^[LU]\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i.test(query);
+
+    const isDinSearch =
+      /^\d{1,8}$/.test(query); // partial or full DIN allowed
+
     setIsLoadingSuggestions(true);
     setSuggestionError("");
     setShowSuggestions(true);
 
-    const params = isCinSearch
-      ? { cin: query.toUpperCase() }
-      : { name: query };
-
     let finalSuggestions = [];
 
+    /* =========================
+       COMPANY SUGGESTIONS
+    ==========================*/
     if (searchMode === "company") {
-      /* =======================
-         1️⃣ PERSONAL API
-      ======================= */
+      // 🔴 Full CIN → no suggestions
+      if (isFullCin) {
+        setSuggestions([]);
+        setShowSuggestions(false);
+        setIsLoadingSuggestions(false);
+        return;
+      }
+
+      const params = { name: query };
+
       try {
+        // 1️⃣ Personal API first
         const personalResponse = await axios.get(
           PERSONAL_COMPANY_API_ENDPOINT,
           { params }
         );
 
-        const personalData = personalResponse.data?.data;
-
+        const personalResults = personalResponse.data?.data;
         if (
           personalResponse.data?.success &&
-          Array.isArray(personalData) &&
-          personalData.length > 0
+          Array.isArray(personalResults) &&
+          personalResults.length > 0
         ) {
-          finalSuggestions.push(
-            ...personalData
-              .filter(c => c.CompanyName && c.CIN)
-              .map(c => ({
-                CompanyName: c.CompanyName,
-                CIN: c.CIN,
-                source: "personal",
-              }))
+          finalSuggestions = personalResults.filter(
+            (c) => c.CompanyName && c.CIN
           );
         }
-      } catch (err) {
-        console.log("Personal API: no results");
+      } catch (_) {}
+
+      // 2️⃣ Public API fallback
+      if (finalSuggestions.length === 0) {
+        try {
+          const publicResponse = await axios.get(COMPANY_API_ENDPOINT, {
+            params,
+          });
+
+          const publicResults = publicResponse.data?.data;
+          if (
+            publicResponse.data?.success &&
+            Array.isArray(publicResults) &&
+            publicResults.length > 0
+          ) {
+            const c = publicResults[0];
+            if ((c.CompanyName || c.company) && (c.CIN || c.cin)) {
+              finalSuggestions = [
+                {
+                  CompanyName: c.CompanyName || c.company,
+                  CIN: c.CIN || c.cin,
+                },
+              ];
+            }
+          }
+        } catch (_) {}
       }
 
-      /* =======================
-         2️⃣ PUBLIC API
-      ======================= */
-      try {
-        const publicResponse = await axios.get(
-          COMPANY_API_ENDPOINT,
-          { params }
-        );
-
-        const publicData = publicResponse.data?.data;
-
-        if (
-          publicResponse.data?.success &&
-          Array.isArray(publicData) &&
-          publicData.length > 0
-        ) {
-          finalSuggestions.push(
-            ...publicData
-              .filter(c => (c.CompanyName || c.company) && (c.CIN || c.cin))
-              .map(c => ({
-                CompanyName: c.CompanyName || c.company,
-                CIN: c.CIN || c.cin,
-                source: "public",
-              }))
-          );
-        }
-      } catch (err) {
-        console.log("Public API: no results");
-      }
-
-      /* =======================
-         3️⃣ DEDUPLICATE BY CIN
-      ======================= */
-      const uniqueSuggestions = Object.values(
+      // ✅ Deduplicate by CIN
+      const unique = Object.values(
         finalSuggestions.reduce((acc, item) => {
           if (item.CIN) acc[item.CIN] = item;
           return acc;
         }, {})
       );
 
-      setSuggestions(uniqueSuggestions);
-    } 
-    /* =======================
-       DIRECTOR MODE (unchanged)
-    ======================= */
+      setSuggestions(unique);
+    }
+
+    /* =========================
+       DIRECTOR SUGGESTIONS
+    ==========================*/
     else {
+      const params = isDinSearch
+        ? { din: query }
+        : { name: query };
+
       try {
         const response = await axios.get(DIRECTOR_API_ENDPOINT, { params });
 
         if (response.data?.success && Array.isArray(response.data.data)) {
-          const uniqueDirectors = Object.values(
-            response.data.data.reduce((acc, dir) => {
-              if (dir.DirectorDIN && !acc[dir.DirectorDIN]) {
-                acc[dir.DirectorDIN] = dir;
-              }
+          const valid = response.data.data.filter(
+            (d) => d.DirectorDIN && d.DirectorFirstName
+          );
+
+          const unique = Object.values(
+            valid.reduce((acc, d) => {
+              acc[d.DirectorDIN] = d;
               return acc;
             }, {})
           );
-          setSuggestions(uniqueDirectors);
+
+          setSuggestions(unique);
         } else {
           setSuggestions([]);
         }
       } catch (err) {
-        setSuggestions([]);
         setSuggestionError("Failed to load director suggestions.");
+        setSuggestions([]);
       }
     }
 
