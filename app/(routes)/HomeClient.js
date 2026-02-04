@@ -531,209 +531,132 @@ export default function Home() {
  
 
   // --- fetchSuggestions ---
-  const fetchSuggestions = useCallback(
-    async (query) => {
-      // --- Input Validation ---
-       const isCinSearch =
-  /^[LU]\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i.test(query);
-      
-      if (!query || query.length < MIN_SEARCH_LENGTH) {
-        setSuggestions([]);
-        setShowSuggestions(false);
-        setSuggestionError("");
-        return;
+const fetchSuggestions = useCallback(
+  async (query) => {
+    // --- Input Validation ---
+    const isCinSearch = /^[LU]/i.test(query);
+
+    if (!query || query.length < MIN_SEARCH_LENGTH) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      setSuggestionError("");
+      return;
+    }
+
+    setIsLoadingSuggestions(true);
+    setSuggestionError("");
+    setShowSuggestions(true);
+
+    const params = isCinSearch
+      ? { cin: query.toUpperCase() }
+      : { name: query };
+
+    let finalSuggestions = [];
+
+    if (searchMode === "company") {
+      /* =======================
+         1️⃣ PERSONAL API
+      ======================= */
+      try {
+        const personalResponse = await axios.get(
+          PERSONAL_COMPANY_API_ENDPOINT,
+          { params }
+        );
+
+        const personalData = personalResponse.data?.data;
+
+        if (
+          personalResponse.data?.success &&
+          Array.isArray(personalData) &&
+          personalData.length > 0
+        ) {
+          finalSuggestions.push(
+            ...personalData
+              .filter(c => c.CompanyName && c.CIN)
+              .map(c => ({
+                CompanyName: c.CompanyName,
+                CIN: c.CIN,
+                source: "personal",
+              }))
+          );
+        }
+      } catch (err) {
+        console.log("Personal API: no results");
       }
 
-      // --- Set Loading State ---
-      setIsLoadingSuggestions(true);
-      setSuggestionError("");
-      setShowSuggestions(true);
-
-      const params = isCinSearch
-        ? { cin: query.toUpperCase() }
-        : { name: query };
-
-      let finalSuggestions = []; // Store final list
-      let suggestionsSource = null; // Track source
-
-      if (searchMode === "company") {
-        // --- Step 1: Try Personal API First ---
-        try {
-          console.log(
-            "Suggestions: Trying Personal API:",
-            PERSONAL_COMPANY_API_ENDPOINT,
-            params
-          );
-          const personalResponse = await axios.get(
-            PERSONAL_COMPANY_API_ENDPOINT,
-            { params }
-          );
-          console.log(
-            "Suggestions: Personal API Response:",
-            personalResponse.data
-          );
-
-          // Expecting { success: true, data: [{ CIN, CompanyName }, ...] } from backend aggregate
-          const personalResultsArray = personalResponse.data?.data;
-          if (
-            personalResponse.data?.success &&
-            Array.isArray(personalResultsArray) &&
-            personalResultsArray.length > 0
-          ) {
-            // Backend already deduplicated, just filter for validity if needed (should be valid now)
-            const validSuggestions = personalResultsArray.filter(
-              (comp) => comp.CompanyName && comp.CIN // Check fields returned by aggregate
-            );
-
-            if (validSuggestions.length > 0) {
-              finalSuggestions = validSuggestions; // Use directly as backend deduplicated
-              suggestionsSource = "personal";
-              console.log(
-                `Suggestions: Found ${finalSuggestions.length} unique suggestions from Personal API.`
-              );
-            } else {
-              console.log(
-                "Suggestions: Personal API successful but suggestions array is empty or invalid after filtering."
-              );
-            }
-          } else {
-            console.log(
-              "Suggestions: Personal API did not return a valid data array."
-            );
-          }
-        } catch (err) {
-          if (err.response && err.response.status === 404) {
-            console.log(`Suggestions: Personal API 404 for query: "${query}".`);
-          } else {
-            console.error(
-              "Suggestions: Error fetching from Personal API:",
-              err.response?.data || err.message
-            );
-          }
-          // Proceed to fallback
-        }
-
-        // --- Step 2: Fallback to Public API if Personal API found nothing ---
-        if (suggestionsSource !== "personal") {
-          try {
-            console.log(
-              "Suggestions: Falling back to Public API:",
-              COMPANY_API_ENDPOINT,
-              params
-            );
-            const publicResponse = await axios.get(COMPANY_API_ENDPOINT, {
-              params,
-            });
-            console.log(
-              "Suggestions: Public API Response:",
-              publicResponse.data
-            );
-
-            const publicResultsArray = publicResponse.data?.data;
-            if (
-              publicResponse.data?.success &&
-              Array.isArray(publicResultsArray) &&
-              publicResultsArray.length > 0
-            ) {
-              const companyRecord = publicResultsArray[0];
-              // Use || here as public API might have different field names
-              if (
-                companyRecord &&
-                (companyRecord.CompanyName || companyRecord.company) &&
-                (companyRecord.CIN || companyRecord.cin)
-              ) {
-                const formattedSingleSuggestion = {
-                  CompanyName:
-                    companyRecord.CompanyName || companyRecord.company,
-                  CIN: companyRecord.CIN || companyRecord.cin,
-                };
-                finalSuggestions = [formattedSingleSuggestion]; // Use the single public result
-                suggestionsSource = "public";
-                console.log("Suggestions: Found 1 suggestion from Public API.");
-              } else {
-                //  console.warn("Suggestions: Public API response's first record is incomplete.");
-              }
-            } else {
-              console.log(
-                "Suggestions: Public API did not return a valid data array."
-              );
-            }
-          } catch (err) {
-            if (err.response && err.response.status === 404) {
-              console.log(`Suggestions: Public API 404 for query: "${query}".`);
-            } else {
-              console.error(
-                "Suggestions: Error fetching from Public API:",
-                err.response?.data || err.message
-              );
-              setSuggestionError("Failed to load suggestions.");
-            }
-            finalSuggestions = []; // Clear if public API fails
-          }
-        }
-
-        // --- Step 3: Set Final Suggestions ---
-        setSuggestions(finalSuggestions); // Set final list (empty or unique results)
-        console.log(
-          `Suggestions: Setting final suggestions list (Count: ${
-            finalSuggestions.length
-          }, Source: ${suggestionsSource || "none"})`
+      /* =======================
+         2️⃣ PUBLIC API
+      ======================= */
+      try {
+        const publicResponse = await axios.get(
+          COMPANY_API_ENDPOINT,
+          { params }
         );
-        // --- End Company Suggestions ---
-      } else {
-        // searchMode === 'director'
-        // --- Director Suggestions Logic ---
-        try {
-          console.log(
-            "Suggestions: Fetching director suggestions...",
-            DIRECTOR_API_ENDPOINT,
-            params
-          );
-          const response = await axios.get(DIRECTOR_API_ENDPOINT, { params });
-          console.log(`Suggestions: Director API Response:`, response.data);
 
-          if (response.data?.success && Array.isArray(response.data.data)) {
-            const validSuggestions = response.data.data.filter(
-              (dir) => dir.DirectorDIN && dir.DirectorFirstName
-            );
-            const uniqueDirectorMap = new Map();
-            validSuggestions.forEach((dir) => {
-              const key = dir.DirectorDIN;
-              if (key && !uniqueDirectorMap.has(key)) {
-                uniqueDirectorMap.set(key, dir);
+        const publicData = publicResponse.data?.data;
+
+        if (
+          publicResponse.data?.success &&
+          Array.isArray(publicData) &&
+          publicData.length > 0
+        ) {
+          finalSuggestions.push(
+            ...publicData
+              .filter(c => (c.CompanyName || c.company) && (c.CIN || c.cin))
+              .map(c => ({
+                CompanyName: c.CompanyName || c.company,
+                CIN: c.CIN || c.cin,
+                source: "public",
+              }))
+          );
+        }
+      } catch (err) {
+        console.log("Public API: no results");
+      }
+
+      /* =======================
+         3️⃣ DEDUPLICATE BY CIN
+      ======================= */
+      const uniqueSuggestions = Object.values(
+        finalSuggestions.reduce((acc, item) => {
+          if (item.CIN) acc[item.CIN] = item;
+          return acc;
+        }, {})
+      );
+
+      setSuggestions(uniqueSuggestions);
+    } 
+    /* =======================
+       DIRECTOR MODE (unchanged)
+    ======================= */
+    else {
+      try {
+        const response = await axios.get(DIRECTOR_API_ENDPOINT, { params });
+
+        if (response.data?.success && Array.isArray(response.data.data)) {
+          const uniqueDirectors = Object.values(
+            response.data.data.reduce((acc, dir) => {
+              if (dir.DirectorDIN && !acc[dir.DirectorDIN]) {
+                acc[dir.DirectorDIN] = dir;
               }
-            });
-            const uniqueDirectors = Array.from(uniqueDirectorMap.values());
-            setSuggestions(uniqueDirectors);
-            console.log(
-              `Suggestions: Found ${uniqueDirectors.length} unique director suggestions.`
-            );
-          } else {
-            console.log(
-              "Suggestions: No director suggestions array found or invalid response."
-            );
-            setSuggestions([]);
-          }
-        } catch (err) {
-          if (err.response && err.response.status === 404) {
-            console.log(`Suggestions: Director API 404 for query: "${query}"`);
-          } else {
-            console.error(
-              `Suggestions: Error fetching director suggestions:`,
-              err.response?.data || err.message
-            );
-            setSuggestionError(`Failed to load director suggestions.`);
-          }
+              return acc;
+            }, {})
+          );
+          setSuggestions(uniqueDirectors);
+        } else {
           setSuggestions([]);
         }
-        // --- End Director Suggestions ---
+      } catch (err) {
+        setSuggestions([]);
+        setSuggestionError("Failed to load director suggestions.");
       }
+    }
 
-      // --- Final Loading State ---
-      setIsLoadingSuggestions(false);
-    },
-    [searchMode]
-  ); // Dependencies
+    setIsLoadingSuggestions(false);
+  },
+  [searchMode]
+);
+
 
   // --- Debounce Suggestions Fetch ---
   useEffect(() => {
